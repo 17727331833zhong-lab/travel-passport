@@ -13,6 +13,7 @@
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
+        /* ===== 基础 ===== */
         * {
             margin: 0;
             padding: 0;
@@ -37,21 +38,19 @@
             position: relative;
             border: 1px solid rgba(255, 215, 100, 0.15);
         }
-
         .page {
             display: none;
-            padding: 24px 20px 30px;
+            padding: 20px 16px 30px;
             min-height: 100vh;
         }
         .page.active {
             display: block;
-            animation: pageSlideIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            animation: pageSlideIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
-
         @keyframes pageSlideIn {
             0% {
                 opacity: 0;
-                transform: translateY(30px) scale(0.98);
+                transform: translateY(25px) scale(0.98);
             }
             100% {
                 opacity: 1;
@@ -66,6 +65,76 @@
             100% {
                 opacity: 1;
                 transform: scale(1);
+            }
+        }
+        @keyframes floatLogo {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes confettiFall {
+            0% {
+                opacity: 1;
+                transform: translateY(-20px) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
+        @keyframes cardFlipIn {
+            0% {
+                opacity: 0;
+                transform: rotateY(180deg) scale(0.5);
+            }
+            100% {
+                opacity: 1;
+                transform: rotateY(0deg) scale(1);
+            }
+        }
+        @keyframes cardFloat {
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(2deg);
+            }
+        }
+        @keyframes glowPulse {
+            0%,
+            100% {
+                box-shadow: 0 0 30px rgba(245, 197, 66, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 60px rgba(245, 197, 66, 0.5);
+            }
+        }
+        @keyframes slideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes shineMove {
+            0% {
+                transform: translateX(-100%) rotate(45deg);
+            }
+            100% {
+                transform: translateX(100%) rotate(45deg);
             }
         }
 
@@ -116,15 +185,6 @@
             position: relative;
             z-index: 2;
             animation: floatLogo 4s ease-in-out infinite;
-        }
-        @keyframes floatLogo {
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-8px);
-            }
         }
         .login-title {
             font-size: 2.2rem;
@@ -285,6 +345,17 @@
             color: #f5c542;
             transform: translateY(-2px);
         }
+        .nav-item .nav-badge {
+            position: absolute;
+            top: -2px;
+            right: -4px;
+            background: #c0392b;
+            color: white;
+            font-size: 0.5rem;
+            padding: 1px 6px;
+            border-radius: 30px;
+            font-weight: 700;
+        }
 
         /* ===== 通用 ===== */
         .card {
@@ -346,6 +417,41 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
+        }
+
+        /* ===== 返回按钮（放大） ===== */
+        .back-btn {
+            font-size: 1rem !important;
+            padding: 8px 16px !important;
+            border-radius: 40px !important;
+            background: rgba(0, 0, 0, 0.04) !important;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: 500;
+            color: #1a2a3a;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            min-width: 70px;
+            justify-content: center;
+        }
+        .back-btn:active {
+            background: rgba(0, 0, 0, 0.1) !important;
+            transform: scale(0.95);
+        }
+        .back-btn i {
+            font-size: 0.9rem;
+        }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .page-header h3 {
+            font-weight: 600;
+            font-size: 1.2rem;
         }
 
         /* ===== 主页 ===== */
@@ -452,31 +558,15 @@
         #mapContainer .leaflet-control-zoom a:hover {
             background: #f5f0eb !important;
         }
-        .custom-marker {
-            background: #1a2a3a;
-            color: #f5c542;
-            padding: 4px 12px;
-            border-radius: 30px;
-            font-size: 12px;
-            font-weight: 700;
-            border: 2px solid #f5c542;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-            cursor: pointer;
-            transition: 0.2s;
-            white-space: nowrap;
-        }
-        .custom-marker:hover {
-            transform: scale(1.08);
-        }
         .custom-marker-photo {
             background: #1a2a3a;
             color: #f5c542;
             padding: 4px 14px;
             border-radius: 30px;
             font-size: 11px;
-            font-weight: 600;
+            font-weight: 700;
             border: 2px solid #f5c542;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
             cursor: pointer;
             transition: 0.2s;
             white-space: nowrap;
@@ -500,6 +590,22 @@
         .custom-marker-food:hover {
             transform: scale(1.08);
         }
+        .custom-marker-shop {
+            background: #2980b9;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 30px;
+            font-size: 10px;
+            font-weight: 600;
+            border: 2px solid white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+        .custom-marker-shop:hover {
+            transform: scale(1.08);
+        }
         .map-loading {
             position: absolute;
             top: 50%;
@@ -517,10 +623,55 @@
             margin-right: 8px;
             animation: spin 1s linear infinite;
         }
-        @keyframes spin {
-            100% {
-                transform: rotate(360deg);
-            }
+        .leaflet-popup-content-wrapper {
+            border-radius: 16px !important;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12) !important;
+            border: 1px solid rgba(255, 255, 255, 0.5) !important;
+            backdrop-filter: blur(8px) !important;
+            background: rgba(255, 255, 255, 0.9) !important;
+        }
+        .leaflet-popup-tip {
+            background: rgba(255, 255, 255, 0.9) !important;
+        }
+        .leaflet-popup-content {
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif !important;
+            font-size: 13px !important;
+            color: #1a2a3a !important;
+            min-width: 130px !important;
+            padding: 4px 2px !important;
+        }
+        .leaflet-popup-content .popup-title {
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 2px;
+        }
+        .leaflet-popup-content .popup-btn {
+            background: #1a2a3a;
+            color: #f5c542;
+            border: none;
+            padding: 4px 16px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 4px;
+            transition: 0.2s;
+        }
+        .leaflet-popup-content .popup-btn:hover {
+            background: #2a3a4a;
+        }
+        .leaflet-popup-content .popup-desc {
+            font-size: 11px;
+            color: #888;
+        }
+        .leaflet-popup-content .popup-tag {
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.06);
+            padding: 0 8px;
+            border-radius: 20px;
+            font-size: 9px;
+            color: #666;
+            margin-top: 2px;
         }
 
         /* ===== 拍照 ===== */
@@ -606,13 +757,19 @@
             border-color: rgba(231, 76, 60, 0.3);
         }
 
-        /* ===== 其他 ===== */
+        /* ===== 周边 ===== */
         .shop-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 12px 0;
             border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .shop-item:active {
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: 12px;
         }
         .shop-item:last-child {
             border-bottom: none;
@@ -647,7 +804,216 @@
             background: #f5d0c0;
             color: #a54f2a;
         }
+        .shop-loc-btn {
+            background: none;
+            border: none;
+            color: #2980b9;
+            font-size: 0.8rem;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 30px;
+            transition: 0.2s;
+        }
+        .shop-loc-btn:hover {
+            background: rgba(41, 128, 185, 0.1);
+        }
 
+        /* ===== NFC 卡片弹出 ===== */
+        .nfc-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(20px);
+            z-index: 999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            animation: fadeInScale 0.4s ease forwards;
+        }
+        .nfc-overlay.show {
+            display: flex;
+        }
+        .nfc-card-container {
+            width: 280px;
+            height: 400px;
+            perspective: 1000px;
+            animation: cardFloat 3s ease-in-out infinite;
+        }
+        .nfc-card {
+            width: 100%;
+            height: 100%;
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 24px;
+            text-align: center;
+            animation: cardFlipIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        .nfc-card .card-bg-pattern {
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            opacity: 0.08;
+            font-size: 4rem;
+            letter-spacing: 20px;
+            line-height: 2;
+            transform: rotate(20deg);
+            pointer-events: none;
+        }
+        .nfc-card .card-emoji {
+            font-size: 4.5rem;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 2;
+        }
+        .nfc-card .card-name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: white;
+            position: relative;
+            z-index: 2;
+            letter-spacing: 2px;
+        }
+        .nfc-card .card-sub {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            color: white;
+            margin-top: 4px;
+            position: relative;
+            z-index: 2;
+            letter-spacing: 4px;
+        }
+        .nfc-card .card-number {
+            position: absolute;
+            bottom: 20px;
+            right: 24px;
+            font-size: 0.6rem;
+            opacity: 0.3;
+            color: white;
+            letter-spacing: 2px;
+            font-weight: 300;
+        }
+        .nfc-card .card-glow {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 60%);
+            pointer-events: none;
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+        .nfc-card .card-shine {
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.05) 50%, transparent 60%);
+            transform: rotate(45deg);
+            animation: shineMove 6s ease-in-out infinite;
+        }
+        .nfc-card .card-border {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            pointer-events: none;
+        }
+        .nfc-card .card-number-badge {
+            position: absolute;
+            top: 16px;
+            left: 20px;
+            font-size: 0.5rem;
+            color: rgba(255, 255, 255, 0.2);
+            letter-spacing: 3px;
+            font-weight: 300;
+        }
+
+        /* 卡片颜色主题 */
+        .card-theme-gold .nfc-card {
+            background: linear-gradient(145deg, #f5c542, #dba92e, #b8922a);
+        }
+        .card-theme-blue .nfc-card {
+            background: linear-gradient(145deg, #2c6b9e, #1a3a5a, #0f2840);
+        }
+        .card-theme-red .nfc-card {
+            background: linear-gradient(145deg, #c0392b, #8a2a1f, #5a1a12);
+        }
+        .card-theme-green .nfc-card {
+            background: linear-gradient(145deg, #27ae60, #1a7a3a, #0f4a2a);
+        }
+        .card-theme-purple .nfc-card {
+            background: linear-gradient(145deg, #8e44ad, #5a2a7a, #3a1a4a);
+        }
+        .card-theme-teal .nfc-card {
+            background: linear-gradient(145deg, #1abc9c, #0f7a6a, #0a4a3a);
+        }
+        .card-theme-pink .nfc-card {
+            background: linear-gradient(145deg, #e84393, #b02a6a, #7a1a4a);
+        }
+        .card-theme-orange .nfc-card {
+            background: linear-gradient(145deg, #e67e22, #b85a1a, #7a3a0a);
+        }
+        .card-theme-dark .nfc-card {
+            background: linear-gradient(145deg, #2c2c3a, #1a1a2a, #0a0a1a);
+        }
+        .card-theme-rose .nfc-card {
+            background: linear-gradient(145deg, #f5a0b0, #d06a7a, #a04a5a);
+        }
+
+        .nfc-collect-btn {
+            margin-top: 30px;
+            padding: 14px 48px;
+            border: none;
+            border-radius: 60px;
+            background: linear-gradient(135deg, #f5c542, #dba92e);
+            color: #1a2a3a;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 8px 40px rgba(245, 197, 66, 0.2);
+            animation: slideUp 0.6s ease 0.8s both;
+        }
+        .nfc-collect-btn:active {
+            transform: scale(0.94);
+        }
+        .nfc-close-btn {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.4);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.2s;
+            z-index: 10;
+        }
+        .nfc-close-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* ===== 集卡 ===== */
         .card-progress {
             background: rgba(0, 0, 0, 0.05);
             border-radius: 60px;
@@ -665,31 +1031,50 @@
         .card-collection {
             display: flex;
             flex-wrap: wrap;
-            gap: 5px;
+            gap: 6px;
             margin: 10px 0;
             justify-content: center;
         }
         .card-slot {
-            width: 38px;
-            height: 52px;
+            width: 44px;
+            height: 60px;
             background: rgba(0, 0, 0, 0.04);
-            border-radius: 8px;
+            border-radius: 10px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 0.45rem;
+            font-size: 0.4rem;
             color: #aaa;
-            border: 1px dashed #ccc;
-            transition: 0.3s;
+            border: 1.5px dashed #ccc;
+            transition: 0.4s;
+            cursor: default;
+            position: relative;
+            gap: 2px;
+        }
+        .card-slot .slot-emoji {
+            font-size: 1.2rem;
+        }
+        .card-slot .slot-label {
+            font-size: 0.35rem;
+            color: #bbb;
         }
         .card-slot.filled {
             background: linear-gradient(145deg, #f5c542, #dba92e);
-            border: 1px solid #c99a2a;
+            border: 1.5px solid #c99a2a;
             color: #1a2a3a;
-            font-weight: 700;
-            font-size: 1.1rem;
-            box-shadow: 0 4px 16px rgba(245, 197, 66, 0.25);
+            box-shadow: 0 4px 16px rgba(245, 197, 66, 0.2);
             transform: translateY(-2px);
+        }
+        .card-slot.filled .slot-label {
+            color: rgba(26, 42, 58, 0.5);
+        }
+        .card-slot .slot-number {
+            position: absolute;
+            bottom: 2px;
+            right: 4px;
+            font-size: 0.3rem;
+            opacity: 0.3;
         }
 
         .wheel {
@@ -736,27 +1121,109 @@
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
         }
 
+        /* ===== 美食 - 丰富版 ===== */
+        .food-category-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            flex-wrap: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .food-category-tabs::-webkit-scrollbar {
+            display: none;
+        }
+        .food-cat-tab {
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            background: rgba(0, 0, 0, 0.04);
+            color: #888;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .food-cat-tab.active {
+            background: #1a2a3a;
+            color: #f5c542;
+        }
+        .food-cat-tab:active {
+            transform: scale(0.94);
+        }
+
         .food-item {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 10px 0;
+            padding: 10px 12px;
             border-bottom: 1px solid rgba(0, 0, 0, 0.04);
             cursor: pointer;
             transition: 0.2s;
-        }
-        .food-item:active {
-            background: rgba(0, 0, 0, 0.02);
             border-radius: 12px;
         }
+        .food-item:active {
+            background: rgba(0, 0, 0, 0.03);
+        }
+        .food-item:last-child {
+            border-bottom: none;
+        }
         .food-img {
-            width: 44px;
-            height: 44px;
+            width: 52px;
+            height: 52px;
             border-radius: 12px;
             object-fit: cover;
             background: #eee;
+            flex-shrink: 0;
+        }
+        .food-info {
+            flex: 1;
+        }
+        .food-info .name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .food-info .desc {
+            font-size: 0.65rem;
+            color: #888;
+        }
+        .food-info .tags {
+            display: flex;
+            gap: 4px;
+            margin-top: 2px;
+            flex-wrap: wrap;
+        }
+        .food-info .tags span {
+            font-size: 0.5rem;
+            background: rgba(0, 0, 0, 0.04);
+            padding: 1px 8px;
+            border-radius: 20px;
+            color: #666;
+        }
+        .food-loc-btn {
+            background: none;
+            border: none;
+            color: #2980b9;
+            font-size: 0.75rem;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 30px;
+            transition: 0.2s;
+            flex-shrink: 0;
+        }
+        .food-loc-btn:hover {
+            background: rgba(41, 128, 185, 0.08);
+        }
+        .food-rating {
+            color: #f5c542;
+            font-size: 0.6rem;
+            letter-spacing: 1px;
         }
 
+        /* ===== 管理员 ===== */
         .admin-badge {
             background: #c0392b;
             color: white;
@@ -799,6 +1266,11 @@
             margin-top: 4px;
             border: 1px solid #eee;
         }
+        .admin-panel .upload-hint {
+            font-size: 0.6rem;
+            color: #999;
+            margin-top: 2px;
+        }
         .admin-stat {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -828,12 +1300,21 @@
             padding: 6px 0;
             border-bottom: 1px solid rgba(0, 0, 0, 0.04);
             font-size: 0.8rem;
+            flex-wrap: wrap;
+            gap: 4px;
         }
-        .admin-shop-item input {
+        .admin-shop-item input[type="number"] {
             padding: 4px 8px;
             border: 1px solid #ddd;
             border-radius: 8px;
             width: 50px;
+            font-size: 0.75rem;
+        }
+        .admin-shop-item input[type="text"] {
+            padding: 4px 8px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 80px;
             font-size: 0.75rem;
         }
         .admin-shop-item .btn-danger {
@@ -845,8 +1326,36 @@
             font-size: 0.6rem;
             cursor: pointer;
         }
+        .admin-shop-item .btn-sm {
+            padding: 2px 10px;
+            border-radius: 30px;
+            font-size: 0.6rem;
+            border: none;
+            cursor: pointer;
+            background: #2980b9;
+            color: white;
+        }
+        .admin-add-shop {
+            display: flex;
+            gap: 6px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .admin-add-shop input,
+        .admin-add-shop select {
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            flex: 1;
+            min-width: 60px;
+        }
+        .admin-add-shop select {
+            flex: 0.5;
+            min-width: 70px;
+        }
 
-        /* 庆祝动画 */
         .confetti-container {
             position: fixed;
             top: 0;
@@ -864,58 +1373,22 @@
             opacity: 0;
             animation: confettiFall 3s ease-in forwards;
         }
-        @keyframes confettiFall {
-            0% {
-                opacity: 1;
-                transform: translateY(-20px) rotate(0deg);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(100vh) rotate(720deg);
-            }
-        }
 
-        /* ===== Leaflet 弹窗美化 ===== */
-        .leaflet-popup-content-wrapper {
-            border-radius: 16px !important;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12) !important;
-            border: 1px solid rgba(255, 255, 255, 0.5) !important;
-            backdrop-filter: blur(8px) !important;
-            background: rgba(255, 255, 255, 0.9) !important;
-        }
-        .leaflet-popup-tip {
-            background: rgba(255, 255, 255, 0.9) !important;
-        }
-        .leaflet-popup-content {
-            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif !important;
-            font-size: 14px !important;
-            color: #1a2a3a !important;
-            min-width: 120px !important;
-            padding: 4px 2px !important;
-        }
-        .leaflet-popup-content .popup-title {
-            font-weight: 700;
-            font-size: 16px;
-            margin-bottom: 4px;
-        }
-        .leaflet-popup-content .popup-btn {
-            background: #1a2a3a;
-            color: #f5c542;
-            border: none;
-            padding: 6px 16px;
-            border-radius: 30px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
+        /* ===== 模板上传提示 ===== */
+        .template-upload-area {
+            border: 2px dashed rgba(0, 0, 0, 0.08);
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.3);
             margin-top: 6px;
-            transition: 0.2s;
         }
-        .leaflet-popup-content .popup-btn:hover {
-            background: #2a3a4a;
+        .template-upload-area .hint-text {
+            font-size: 0.7rem;
+            color: #999;
         }
-        .leaflet-popup-content .popup-desc {
-            font-size: 12px;
-            color: #888;
+        .template-upload-area .hint-text i {
+            margin-right: 4px;
         }
     </style>
 </head>
@@ -925,15 +1398,34 @@
         <!-- ===== Toast ===== -->
         <div id="toast" class="toast"></div>
 
+        <!-- ===== NFC 卡片弹出层 ===== -->
+        <div class="nfc-overlay" id="nfcOverlay">
+            <button class="nfc-close-btn" onclick="closeNfcCard()">✕</button>
+            <div class="nfc-card-container" id="nfcCardContainer">
+                <div class="nfc-card" id="nfcCard">
+                    <div class="card-glow"></div>
+                    <div class="card-shine"></div>
+                    <div class="card-border"></div>
+                    <div class="card-bg-pattern" id="cardBgPattern">✦</div>
+                    <div class="card-number-badge" id="cardNumberBadge">#001</div>
+                    <div class="card-emoji" id="cardEmoji">🃏</div>
+                    <div class="card-name" id="cardName">神秘卡片</div>
+                    <div class="card-sub" id="cardSub">望夏札记 · 限定</div>
+                    <div class="card-number" id="cardNumber">✦ 001/10</div>
+                </div>
+            </div>
+            <button class="nfc-collect-btn" onclick="collectCard()">📥 收下这张卡</button>
+        </div>
+
         <!-- ===== Login ===== -->
         <div id="loginPage" class="page active">
             <div class="login-pattern"></div>
-            <div class="login-logo">&#128214;</div>
+            <div class="login-logo">📖</div>
             <div class="login-title">望夏札记</div>
             <div class="login-subtitle">— MACAU · 2026 —</div>
             <div class="login-slogan">
-                &#8220;用一张票，入一座城<br />
-                寻一个人，<span>离开时是我们</span>&#8221;
+                "用一张票，入一座城<br />
+                寻一个人，<span>离开时是我们</span>"
             </div>
             <input type="text" class="login-input" id="ticketInput" placeholder="输入门票编码 (如: M2026-888)" value="M2026-888" />
             <button class="login-btn" onclick="handleLogin('user')">✦ 开启旅程 ✦</button>
@@ -964,19 +1456,25 @@
                 <div class="func-card" onclick="window.open('https://www.dsat.gov.mo/bus/','_blank')"><i class="fas fa-bus"></i><span>交通线路</span></div>
             </div>
             <div id="adminEntry" class="hidden" style="margin-top:14px; text-align:center;">
-                <button class="btn-primary" onclick="showPage('adminPage')" style="background:#c0392b; font-size:0.85rem;">&#128736;&#65039; 管理后台</button>
+                <button class="btn-primary" onclick="showPage('adminPage')" style="background:#c0392b; font-size:0.85rem;">🛠️ 管理后台</button>
             </div>
         </div>
 
         <!-- ===== Shop ===== -->
         <div id="shopPage" class="page">
-            <div class="flex-between"><h3 style="font-weight:600;">🏪 周边获取</h3><span onclick="showPage('homePage')" style="cursor:pointer; opacity:0.5; font-size:0.85rem;">← 返回</span></div>
+            <div class="page-header">
+                <h3>🏪 周边获取</h3>
+                <button class="back-btn" onclick="showPage('homePage')"><i class="fas fa-arrow-left"></i> 返回</button>
+            </div>
             <div id="shopList"></div>
         </div>
 
         <!-- ===== Photo ===== -->
         <div id="photoPage" class="page">
-            <div class="flex-between"><h3 style="font-weight:600;">📸 定点拍照</h3><span onclick="showPage('homePage')" style="cursor:pointer; opacity:0.5; font-size:0.85rem;">← 返回</span></div>
+            <div class="page-header">
+                <h3>📸 定点拍照</h3>
+                <button class="back-btn" onclick="showPage('homePage')"><i class="fas fa-arrow-left"></i> 返回</button>
+            </div>
             <div id="mapContainer">
                 <div class="map-loading"><i class="fas fa-spinner"></i> 加载地图中...</div>
             </div>
@@ -1001,7 +1499,10 @@
 
         <!-- ===== NFC ===== -->
         <div id="nfcPage" class="page">
-            <div class="flex-between"><h3 style="font-weight:600;">💳 NFC集卡</h3><span onclick="showPage('homePage')" style="cursor:pointer; opacity:0.5; font-size:0.85rem;">← 返回</span></div>
+            <div class="page-header">
+                <h3>💳 NFC集卡</h3>
+                <button class="back-btn" onclick="showPage('homePage')"><i class="fas fa-arrow-left"></i> 返回</button>
+            </div>
             <div class="card">
                 <div class="flex-between"><span>🎴 集卡进度</span><span id="cardCountDisplay">0 / 10</span></div>
                 <div class="card-progress"><div class="card-progress-bar" id="cardProgressBar" style="width:0%;"></div></div>
@@ -1018,7 +1519,10 @@
 
         <!-- ===== Print ===== -->
         <div id="printPage" class="page">
-            <div class="flex-between"><h3 style="font-weight:600;">🖨️ 相片打印</h3><span onclick="showPage('homePage')" style="cursor:pointer; opacity:0.5; font-size:0.85rem;">← 返回</span></div>
+            <div class="page-header">
+                <h3>🖨️ 相片打印</h3>
+                <button class="back-btn" onclick="showPage('homePage')"><i class="fas fa-arrow-left"></i> 返回</button>
+            </div>
             <div class="card">
                 <div class="flex-between"><span>📇 剩余次数</span><span id="printCount" style="font-size:2rem; font-weight:300; color:#f5c542;">2</span></div>
                 <div style="display:flex; gap:8px; margin:10px 0; flex-wrap:wrap;">
@@ -1032,35 +1536,81 @@
 
         <!-- ===== Food ===== -->
         <div id="foodPage" class="page">
-            <div class="flex-between"><h3 style="font-weight:600;">🍜 美食地图</h3><span onclick="showPage('homePage')" style="cursor:pointer; opacity:0.5; font-size:0.85rem;">← 返回</span></div>
+            <div class="page-header">
+                <h3>🍜 美食地图</h3>
+                <button class="back-btn" onclick="showPage('homePage')"><i class="fas fa-arrow-left"></i> 返回</button>
+            </div>
+            <!-- 分类标签 -->
+            <div class="food-category-tabs" id="foodCategoryTabs">
+                <button class="food-cat-tab active" data-cat="all">全部</button>
+                <button class="food-cat-tab" data-cat="葡国菜">🇵🇹 葡国菜</button>
+                <button class="food-cat-tab" data-cat="茶餐厅">☕ 茶餐厅</button>
+                <button class="food-cat-tab" data-cat="甜品">🍰 甜品</button>
+                <button class="food-cat-tab" data-cat="手信">🎁 手信</button>
+                <button class="food-cat-tab" data-cat="粥粉面">🍜 粥粉面</button>
+            </div>
             <div id="foodList"></div>
         </div>
 
         <!-- ===== Admin ===== -->
         <div id="adminPage" class="page">
-            <div class="flex-between"><h3 style="font-weight:600;">🛠️ 管理 <span class="admin-badge">管理员</span></h3><span onclick="showPage('homePage')" style="cursor:pointer; opacity:0.5; font-size:0.85rem;">← 返回</span></div>
+            <div class="page-header">
+                <h3>🛠️ 管理 <span class="admin-badge">管理员</span></h3>
+                <button class="back-btn" onclick="showPage('homePage')"><i class="fas fa-arrow-left"></i> 返回</button>
+            </div>
             <div class="card"><h4>📊 实时数据</h4><div class="admin-stat"><div class="stat-item"><div class="num" id="statUsers">128</div><div class="label">总用户</div></div><div class="stat-item"><div class="num" id="statCheckins">276</div><div class="label">总打卡</div></div><div class="stat-item"><div class="num" id="statCards">45</div><div class="label">集卡总数</div></div></div></div>
-            <div class="admin-panel"><h4>📤 资源管理</h4>
-                <label>📸 模板A (大三巴)</label><input type="file" accept="image/*" onchange="uploadResource('template0', this)" />
+
+            <!-- 模板上传 -->
+            <div class="admin-panel">
+                <h4>📸 拍照模板管理</h4>
+                <div class="template-upload-area">
+                    <div class="hint-text"><i class="fas fa-info-circle"></i> 上传模板图片，拍照时会自动合成</div>
+                </div>
+                <label>模板A (大三巴)</label>
+                <input type="file" accept="image/*" onchange="uploadResource('template0', this)" />
                 <div id="template0Preview" class="preview-img"></div>
-                <label>📸 模板B (议事亭)</label><input type="file" accept="image/*" onchange="uploadResource('template1', this)" />
+                <label>模板B (议事亭)</label>
+                <input type="file" accept="image/*" onchange="uploadResource('template1', this)" />
                 <div id="template1Preview" class="preview-img"></div>
-                <label>📸 模板C (澳门塔)</label><input type="file" accept="image/*" onchange="uploadResource('template2', this)" />
+                <label>模板C (澳门塔)</label>
+                <input type="file" accept="image/*" onchange="uploadResource('template2', this)" />
                 <div id="template2Preview" class="preview-img"></div>
-                <label>📸 模板D (官也街)</label><input type="file" accept="image/*" onchange="uploadResource('template3', this)" />
+                <label>模板D (官也街)</label>
+                <input type="file" accept="image/*" onchange="uploadResource('template3', this)" />
                 <div id="template3Preview" class="preview-img"></div>
                 <div id="uploadStatus" style="color:#2a7a4a; margin-top:6px; font-size:0.75rem;"></div>
-                <button class="btn-outline" style="margin-top:10px; width:100%;" onclick="clearResources()">🗑️ 清除所有资源</button>
+                <button class="btn-outline" style="margin-top:10px; width:100%;" onclick="clearResources()">🗑️ 清除所有模板</button>
             </div>
-            <div class="admin-panel"><h4>🏪 店铺管理</h4>
+
+            <!-- 店铺管理 -->
+            <div class="admin-panel">
+                <h4>🏪 店铺管理 <span style="font-size:0.6rem;color:#999;font-weight:400;">（点击店铺名可在地图查看）</span></h4>
                 <div id="adminShopList"></div>
-                <div style="display:flex; gap:6px; margin-top:10px; flex-wrap:wrap;">
-                    <input type="text" id="newShopName" placeholder="新店铺" style="flex:1; padding:8px; border:1px solid #ddd; border-radius:12px; font-size:0.75rem;" />
-                    <select id="newShopType" style="padding:8px; border:1px solid #ddd; border-radius:12px; font-size:0.75rem;">
+                <div class="admin-add-shop">
+                    <input type="text" id="newShopName" placeholder="店铺名称" />
+                    <select id="newShopType">
                         <option value="官方">官方</option>
                         <option value="消费得">消费得</option>
                     </select>
                     <button class="btn-primary" onclick="addShop()" style="padding:8px 16px; font-size:0.75rem;">添加</button>
+                </div>
+            </div>
+
+            <!-- 美食管理 -->
+            <div class="admin-panel">
+                <h4>🍜 美食管理</h4>
+                <div id="adminFoodList"></div>
+                <div class="admin-add-shop" style="margin-top:8px;">
+                    <input type="text" id="newFoodName" placeholder="美食名称" style="flex:1;" />
+                    <input type="text" id="newFoodDesc" placeholder="简介" style="flex:1.5;" />
+                    <select id="newFoodCategory">
+                        <option value="葡国菜">🇵🇹 葡国菜</option>
+                        <option value="茶餐厅">☕ 茶餐厅</option>
+                        <option value="甜品">🍰 甜品</option>
+                        <option value="手信">🎁 手信</option>
+                        <option value="粥粉面">🍜 粥粉面</option>
+                    </select>
+                    <button class="btn-primary" onclick="addFood()" style="padding:8px 16px; font-size:0.75rem;">添加</button>
                 </div>
             </div>
         </div>
@@ -1077,6 +1627,48 @@
 
     <script>
         // ================================================================
+        //  卡片数据
+        // ================================================================
+        var CARD_DESIGNS = [
+            { emoji: '🏛️', name: '大三巴', sub: '历史 · 澳门地标', theme: 'card-theme-gold', pattern: '✦' },
+            { emoji: '🎭', name: '议事亭', sub: '文化 · 葡式建筑', theme: 'card-theme-blue', pattern: '✦' },
+            { emoji: '🗼', name: '澳门塔', sub: '现代 · 城市天际', theme: 'card-theme-teal', pattern: '✦' },
+            { emoji: '🍜', name: '官也街', sub: '美食 · 地道风味', theme: 'card-theme-red', pattern: '✦' },
+            { emoji: '⛲', name: '喷水池', sub: '浪漫 · 相遇之地', theme: 'card-theme-rose', pattern: '✦' },
+            { emoji: '🏮', name: '福隆新街', sub: '怀旧 · 老街故事', theme: 'card-theme-orange', pattern: '✦' },
+            { emoji: '🌊', name: '路环码头', sub: '海风 · 渔港记忆', theme: 'card-theme-blue', pattern: '✦' },
+            { emoji: '💒', name: '玫瑰堂', sub: '信仰 · 巴洛克风', theme: 'card-theme-pink', pattern: '✦' },
+            { emoji: '🎪', name: '大赛车', sub: '速度 · 澳门盛事', theme: 'card-theme-dark', pattern: '✦' },
+            { emoji: '🎆', name: '烟花汇演', sub: '璀璨 · 难忘之夜', theme: 'card-theme-purple', pattern: '✦' }
+        ];
+
+        // ================================================================
+        //  美食数据（丰富版）
+        // ================================================================
+        var FOOD_DATA = [
+            { name: '安德鲁蛋挞', desc: '路环总店，葡式蛋挞鼻祖，外酥里嫩', category: '甜品', lng: 113.566, lat: 22.126,
+                img: 'https://images.unsplash.com/photo-1558618666-fcd25c85f6a2?w=200&h=200&fit=crop', rating: 4.9 },
+            { name: '诚昌水蟹粥', desc: '氹仔官也街，招牌水蟹粥，鲜甜浓郁', category: '粥粉面', lng: 113.558, lat: 22.155,
+                img: 'https://images.unsplash.com/photo-1579981695585-4a43b5b4f2d8?w=200&h=200&fit=crop', rating: 4.7 },
+            { name: '牛记咖喱', desc: '十月初五日街，咖喱牛腩饭，澳门老字号', category: '茶餐厅', lng: 113.546, lat: 22.189,
+                img: 'https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=200&h=200&fit=crop', rating: 4.5 },
+            { name: '玛嘉烈蛋挞', desc: '葡京附近，经典葡挞，安德鲁前妻创办', category: '甜品', lng: 113.544, lat: 22.191,
+                img: 'https://images.unsplash.com/photo-1558618666-fcd25c85f6a2?w=200&h=200&fit=crop', rating: 4.8 },
+            { name: '葡国鸡餐厅', desc: '大三巴旁，正宗葡国鸡，椰香浓郁', category: '葡国菜', lng: 113.540, lat: 22.196,
+                img: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=200&h=200&fit=crop', rating: 4.4 },
+            { name: '杏仁饼世家', desc: '氹仔官也街，手工杏仁饼，澳门手信代表', category: '手信', lng: 113.559, lat: 22.156,
+                img: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=200&h=200&fit=crop', rating: 4.6 },
+            { name: '猪扒包老店', desc: '氹仔，炭烤猪扒包，澳门必吃', category: '茶餐厅', lng: 113.557, lat: 22.154,
+                img: 'https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=200&h=200&fit=crop', rating: 4.7 },
+            { name: '木糠布甸', desc: '官也街，木糠布甸，澳门特色甜品', category: '甜品', lng: 113.558, lat: 22.155,
+                img: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=200&h=200&fit=crop', rating: 4.3 },
+            { name: '路环咖啡', desc: '路环海边，手冲咖啡，悠闲时光', category: '茶餐厅', lng: 113.567, lat: 22.125,
+                img: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=200&h=200&fit=crop', rating: 4.2 },
+            { name: '葡式海鲜饭', desc: '氹仔，葡式海鲜饭，鲜味十足', category: '葡国菜', lng: 113.560, lat: 22.157,
+                img: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=200&h=200&fit=crop', rating: 4.5 }
+        ];
+
+        // ================================================================
         //  全局状态
         // ================================================================
         var ADMIN_PASSWORD = 'admin123';
@@ -1085,11 +1677,14 @@
         var leafletMarkers = [];
         var selectedPhotoIdx = 0;
         var cameraStream = null;
+        var pendingCardIndex = -1;
+        var isCollecting = false;
+        var currentFoodCategory = 'all';
 
         var state = {
             shops: [
                 { id: 0, name: '澳门文创馆', type: '官方', got: false, count: 34, threshold: 50, lng: 113.54,
-                lat: 22.19 },
+                    lat: 22.19 },
                 { id: 1, name: '大三巴礼品店', type: '消费得', got: false, count: 22, threshold: 40, lng: 113.541,
                     lat: 22.197 },
                 { id: 2, name: '氹仔手信坊', type: '官方', got: false, count: 47, threshold: 50, lng: 113.558,
@@ -1116,16 +1711,7 @@
             hasLottery: false,
             lotteryPrize: '',
             printCount: 2,
-            foods: [
-                { name: '安德鲁蛋挞', desc: '路环总店，葡式蛋挞鼻祖', lng: 113.566, lat: 22.126,
-                    img: 'https://images.unsplash.com/photo-1558618666-fcd25c85f6a2?w=100&h=100&fit=crop' },
-                { name: '诚昌水蟹粥', desc: '氹仔官也街，招牌水蟹粥', lng: 113.558, lat: 22.155,
-                    img: 'https://images.unsplash.com/photo-1579981695585-4a43b5b4f2d8?w=100&h=100&fit=crop' },
-                { name: '牛记咖喱', desc: '十月初五日街，咖喱牛腩', lng: 113.546, lat: 22.189,
-                    img: 'https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=100&h=100&fit=crop' },
-                { name: '玛嘉烈蛋挞', desc: '葡京附近，经典蛋挞', lng: 113.544, lat: 22.191,
-                    img: 'https://images.unsplash.com/photo-1558618666-fcd25c85f6a2?w=100&h=100&fit=crop' }
-            ]
+            foods: JSON.parse(JSON.stringify(FOOD_DATA))
         };
 
         // ================================================================
@@ -1141,7 +1727,7 @@
         }
 
         // ================================================================
-        //  撒花动画
+        //  撒花
         // ================================================================
         function fireConfetti() {
             var container = document.createElement('div');
@@ -1164,44 +1750,43 @@
         }
 
         // ================================================================
-        //  Leaflet 地图
+        //  地图
         // ================================================================
-        function initLeafletMap() {
+        function initLeafletMap(showAll) {
             var container = document.getElementById('mapContainer');
-
-            // 检查 Leaflet 是否加载
             if (typeof L === 'undefined') {
                 container.innerHTML =
-                    '<div class="map-loading" style="color:#c0392b;"><i class="fas fa-exclamation-circle"></i> Leaflet 加载失败，请检查网络</div>';
+                    '<div class="map-loading" style="color:#c0392b;"><i class="fas fa-exclamation-circle"></i> 地图加载失败</div>';
                 return;
             }
-
             try {
-                // 移除加载提示
                 var loading = container.querySelector('.map-loading');
                 if (loading) loading.remove();
 
-                // 创建地图
-                leafletMap = L.map(container, {
-                    center: [22.19, 113.54],
-                    zoom: 14,
-                    zoomControl: true,
-                    attributionControl: true
-                });
+                if (leafletMap) {
+                    leafletMap.invalidateSize();
+                    // 清除旧标记
+                    leafletMarkers.forEach(function(m) { if (m) leafletMap.removeLayer(m); });
+                    leafletMarkers = [];
+                } else {
+                    leafletMap = L.map(container, {
+                        center: [22.19, 113.54],
+                        zoom: 14,
+                        zoomControl: true,
+                        attributionControl: true
+                    });
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: 19,
+                        attribution: '© OpenStreetMap'
+                    }).addTo(leafletMap);
+                }
 
-                // 加载 OpenStreetMap 底图
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    maxZoom: 19,
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                }).addTo(leafletMap);
-
-                // ===== 添加拍照点位 =====
+                // 只显示拍照点（拍照页面）
                 state.photoPoints.forEach(function(pt, idx) {
                     var popupContent = '<div class="popup-title">📸 ' + pt.name + '</div>' +
                         '<div class="popup-desc">👥 ' + pt.count + ' 人已打卡</div>' +
                         '<button class="popup-btn" onclick="selectPhotoPointFromMap(' + idx +
                         ')">去拍照</button>';
-
                     var marker = L.marker([pt.lat, pt.lng], {
                         icon: L.divIcon({
                             className: '',
@@ -1211,46 +1796,16 @@
                             iconAnchor: [20, 30]
                         })
                     }).addTo(leafletMap);
-
-                    marker.bindPopup(popupContent, {
-                        maxWidth: 200,
-                        className: 'photo-popup'
-                    });
-
+                    marker.bindPopup(popupContent, { maxWidth: 200 });
                     leafletMarkers.push(marker);
                 });
 
-                // ===== 添加美食点位 =====
-                state.foods.forEach(function(f) {
-                    var popupContent = '<div class="popup-title">🍜 ' + f.name + '</div>' +
-                        '<div class="popup-desc">' + f.desc + '</div>';
-
-                    var marker = L.marker([f.lat, f.lng], {
-                        icon: L.divIcon({
-                            className: '',
-                            html: '<div class="custom-marker-food">' + f.name.replace(/[蛋挞粥饭]/g, '') +
-                                '</div>',
-                            iconSize: [50, 22],
-                            iconAnchor: [25, 22]
-                        })
-                    }).addTo(leafletMap);
-
-                    marker.bindPopup(popupContent, {
-                        maxWidth: 200
-                    });
-                    leafletMarkers.push(marker);
-                });
-
-                // ===== 定位用户 =====
+                // 定位
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(
                         function(pos) {
-                            var userLat = pos.coords.latitude;
-                            var userLng = pos.coords.longitude;
-                            leafletMap.setView([userLat, userLng], 15);
-
-                            // 添加用户位置标记
-                            var userMarker = L.marker([userLat, userLng], {
+                            leafletMap.setView([pos.coords.latitude, pos.coords.longitude], 15);
+                            L.marker([pos.coords.latitude, pos.coords.longitude], {
                                 icon: L.divIcon({
                                     className: '',
                                     html: '<div style="background:#1a2a3a;color:white;padding:4px 12px;border-radius:30px;font-size:12px;font-weight:600;border:2px solid #f5c542;box-shadow:0 4px 16px rgba(0,0,0,0.2);">📍 我在这里</div>',
@@ -1258,34 +1813,36 @@
                                     iconAnchor: [40, 26]
                                 })
                             }).addTo(leafletMap);
-
-                            showToast('📍 已定位到你的位置', 'success');
                         },
-                        function() {
-                            // 定位失败，使用默认中心
-                            showToast('📍 已加载澳门地图', '');
-                        }, {
-                            enableHighAccuracy: true,
-                            timeout: 8000
-                        }
+                        function() {},
+                        { enableHighAccuracy: true, timeout: 8000 }
                     );
-                } else {
-                    showToast('📍 已加载澳门地图', '');
                 }
-
-                // 延迟刷新
-                setTimeout(function() {
-                    if (leafletMap) leafletMap.invalidateSize();
-                }, 500);
-
+                setTimeout(function() { if (leafletMap) leafletMap.invalidateSize(); }, 500);
             } catch (e) {
-                container.innerHTML = '<div class="map-loading" style="color:#c0392b;"><i class="fas fa-exclamation-circle"></i> 地图加载失败: ' +
-                    e.message + '</div>';
+                container.innerHTML = '<div class="map-loading" style="color:#c0392b;"><i class="fas fa-exclamation-circle"></i> 地图加载失败</div>';
             }
         }
 
+        function focusOnShop(name) {
+            var s = state.shops.find(function(x) { return x.name === name; });
+            if (s && leafletMap) { leafletMap.setView([s.lat, s.lng], 16);
+                showToast('📍 ' + s.name, ''); }
+        }
+
+        function focusOnFood(name) {
+            var f = state.foods.find(function(x) { return x.name === name; });
+            if (f && leafletMap) { leafletMap.setView([f.lat, f.lng], 16);
+                showToast('📍 ' + f.name, ''); }
+        }
+
+        function focusOnPhotoPoint(idx) {
+            var pt = state.photoPoints[idx];
+            if (pt && leafletMap) { leafletMap.setView([pt.lat, pt.lng], 16); }
+        }
+
         // ================================================================
-        //  资源管理
+        //  模板上传
         // ================================================================
         var RESOURCE_KEYS = ['template0', 'template1', 'template2', 'template3'];
 
@@ -1303,8 +1860,8 @@
                 document.getElementById('uploadStatus').innerText = '✅ ' + key + ' 上传成功！';
                 applyResource(key, dataUrl);
                 var previewEl = document.getElementById(key + 'Preview');
-                if (previewEl) previewEl.innerHTML = '<img src="' + dataUrl + '" />';
-                showToast(key + ' 上传成功 ✅', 'success');
+                if (previewEl) previewEl.innerHTML = '<img src="' + dataUrl + '" style="max-height:60px;border-radius:8px;border:1px solid #eee;" />';
+                showToast('✅ 模板 ' + key + ' 上传成功', 'success');
             };
             reader.readAsDataURL(file);
         }
@@ -1323,7 +1880,8 @@
                 if (data) {
                     applyResource(key, data);
                     var previewEl = document.getElementById(key + 'Preview');
-                    if (previewEl) previewEl.innerHTML = '<img src="' + data + '" />';
+                    if (previewEl) previewEl.innerHTML = '<img src="' + data +
+                        '" style="max-height:60px;border-radius:8px;border:1px solid #eee;" />';
                 }
             });
             for (var i = 0; i < 4; i++) {
@@ -1334,9 +1892,9 @@
         }
 
         function clearResources() {
-            if (!confirm('确定清除所有上传资源？')) return;
+            if (!confirm('确定清除所有上传模板？')) return;
             RESOURCE_KEYS.forEach(function(key) { localStorage.removeItem('res_' + key); });
-            showToast('已清除所有资源', '');
+            showToast('已清除所有模板', '');
             setTimeout(function() { location.reload(); }, 500);
         }
 
@@ -1362,46 +1920,33 @@
         function enterApp(role) {
             document.getElementById('loginPage').classList.remove('active');
             document.getElementById('loginPage').style.display = 'none';
-
             document.getElementById('homePage').classList.add('active');
             document.getElementById('bottomNav').style.display = 'flex';
-
             document.getElementById('userIdDisplay').innerText = currentUser.id;
-
             if (role === 'admin') {
                 document.getElementById('adminEntry').classList.remove('hidden');
                 document.getElementById('userIdDisplay').innerHTML = currentUser.id +
                     ' <span style="background:#c0392b;padding:0 10px;border-radius:30px;font-size:0.55rem;color:#fff;">管理</span>';
                 renderAdminShopList();
+                renderAdminFoodList();
                 updateStats();
             } else {
                 document.getElementById('adminEntry').classList.add('hidden');
             }
-
             renderAll();
             loadAllResources();
-
-            // 延迟加载地图
             setTimeout(function() {
-                if (typeof L !== 'undefined') {
-                    initLeafletMap();
-                } else {
-                    // 如果 Leaflet 还没加载完，等待后重试
-                    var retryCount = 0;
-                    var checkLeaflet = setInterval(function() {
-                        retryCount++;
-                        if (typeof L !== 'undefined') {
-                            clearInterval(checkLeaflet);
-                            initLeafletMap();
-                        } else if (retryCount > 10) {
-                            clearInterval(checkLeaflet);
+                if (typeof L !== 'undefined') { initLeafletMap(); } else {
+                    var rc = 0;
+                    var ci = setInterval(function() {
+                        rc++;
+                        if (typeof L !== 'undefined') { clearInterval(ci);
+                            initLeafletMap(); } else if (rc > 10) { clearInterval(ci);
                             document.getElementById('mapContainer').innerHTML =
-                                '<div class="map-loading" style="color:#c0392b;"><i class="fas fa-exclamation-circle"></i> 地图加载超时，请刷新重试</div>';
-                        }
+                                '<div class="map-loading" style="color:#c0392b;"><i class="fas fa-exclamation-circle"></i> 地图加载超时</div>'; }
                     }, 500);
                 }
             }, 400);
-
             showToast('👋 欢迎回来，' + currentUser.id, 'success');
         }
 
@@ -1425,23 +1970,41 @@
             if (pageId === 'foodPage') renderFoods();
             if (pageId === 'printPage') updatePrintQr();
             if (pageId === 'adminPage') { renderAdminShopList();
+                renderAdminFoodList();
                 updateStats(); }
             if (pageId === 'homePage') updateProgress();
             if (pageId === 'photoPage') {
+                // 重新初始化地图（只显示拍照点）
                 setTimeout(function() {
                     if (leafletMap) {
+                        // 清除旧标记
+                        leafletMarkers.forEach(function(m) { if (m) leafletMap.removeLayer(m); });
+                        leafletMarkers = [];
+                        // 只加拍照点
+                        state.photoPoints.forEach(function(pt, idx2) {
+                            var popupContent = '<div class="popup-title">📸 ' + pt.name + '</div>' +
+                                '<div class="popup-desc">👥 ' + pt.count + ' 人已打卡</div>' +
+                                '<button class="popup-btn" onclick="selectPhotoPointFromMap(' +
+                                idx2 + ')">去拍照</button>';
+                            var marker = L.marker([pt.lat, pt.lng], {
+                                icon: L.divIcon({
+                                    className: '',
+                                    html: '<div class="custom-marker-photo">' + String
+                                        .fromCharCode(65 + idx2) + '</div>',
+                                    iconSize: [40, 30],
+                                    iconAnchor: [20, 30]
+                                })
+                            }).addTo(leafletMap);
+                            marker.bindPopup(popupContent, { maxWidth: 200 });
+                            leafletMarkers.push(marker);
+                        });
                         leafletMap.invalidateSize();
-                    } else if (typeof L !== 'undefined') {
-                        initLeafletMap();
-                    }
+                    } else if (typeof L !== 'undefined') { initLeafletMap(); }
                 }, 300);
             }
             window.scrollTo(0, 0);
         }
 
-        // ================================================================
-        //  进度
-        // ================================================================
         function updateProgress() {
             document.getElementById('progCards').innerText = state.cards.length + '/10';
             var got = state.shops.filter(function(s) { return s.got; }).length;
@@ -1459,11 +2022,14 @@
                 var flagColor = shop.got ? 'style="color:#2a7a4a;"' : 'style="color:#ccc;"';
                 var restock = shop.count >= shop.threshold ?
                     '<span class="shop-tag restock">🔥 待补货</span>' : '';
-                return '<div class="shop-item"><div class="shop-info"><div class="shop-name"><span class="flag" ' +
-                    flagColor + '>' + flag + '</span>' + shop.name + '<span class="shop-tag">' + shop.type +
-                    '</span>' + restock +
-                    '</div><div class="shop-desc">👥 ' + shop.count + '人已打卡</div></div><div><button class="btn-outline" onclick="toggleShopGot(' +
-                    idx + ')">' + (shop.got ? '✅ 已获取' : '⬜ 未获取') + '</button></div></div>';
+                return '<div class="shop-item" onclick="focusOnShop(\'' + shop.name + '\');showPage(\'photoPage\')">' +
+                    '<div class="shop-info"><div class="shop-name"><span class="flag" ' + flagColor + '>' + flag +
+                    '</span>' + shop.name + '<span class="shop-tag">' + shop.type + '</span>' + restock +
+                    '</div><div class="shop-desc">👥 ' + shop.count + '人已打卡</div></div>' +
+                    '<div><button class="shop-loc-btn" onclick="event.stopPropagation();focusOnShop(\'' + shop
+                    .name + '\');showPage(\'photoPage\')"><i class="fas fa-map-pin"></i></button>' +
+                    '<button class="btn-outline" onclick="event.stopPropagation();toggleShopGot(' + idx +
+                    ')">' + (shop.got ? '✅ 已获取' : '⬜ 未获取') + '</button></div></div>';
             }).join('');
         }
 
@@ -1479,13 +2045,10 @@
         }
 
         // ================================================================
-        //  拍照 - 选点
+        //  拍照
         // ================================================================
         function selectPhotoPointFromMap(idx) {
-            // 关闭地图弹窗
-            if (leafletMap) {
-                leafletMap.closePopup();
-            }
+            if (leafletMap) leafletMap.closePopup();
             selectPhotoPoint(idx);
         }
 
@@ -1496,12 +2059,7 @@
             document.getElementById('photoPointCount').innerText = '📷 ' + pt.count + '人拍摄';
             document.getElementById('photoSample').innerHTML = '<img src="' + pt.sample +
                 '" style="width:100%;max-height:120px;object-fit:cover;border-radius:12px;" /><div style="font-size:0.65rem;color:#888;margin-top:4px;">点击「去拍照」合成模板</div>';
-
-            // 移动地图到该点
-            if (leafletMap) {
-                leafletMap.setView([pt.lat, pt.lng], 16);
-            }
-
+            if (leafletMap) { leafletMap.setView([pt.lat, pt.lng], 16); }
             document.getElementById('photoPreviewArea').classList.remove('hidden');
             applyTemplateToCanvas(idx);
             showToast('📍 已选择：' + pt.name, '');
@@ -1526,34 +2084,28 @@
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 ctx.fillStyle = '#f5c542';
                 ctx.font = '15px sans-serif';
-                ctx.fillText('📸 上传模板更精彩', 100, 120);
+                ctx.fillText('📸 请上传模板', 120, 110);
                 ctx.fillStyle = '#888';
                 ctx.font = '11px sans-serif';
-                ctx.fillText('管理员后台可上传', 120, 145);
+                ctx.fillText('管理员后台可上传', 120, 135);
             }
         }
 
-        // ================================================================
-        //  拍照 - 摄像头
-        // ================================================================
         function openCamera() {
             var video = document.getElementById('video');
             var canvas = document.getElementById('photoCanvas');
             var openBtn = document.getElementById('camOpenBtn');
             var captureBtn = document.getElementById('camCaptureBtn');
             var retryBtn = document.getElementById('camRetryBtn');
-
             if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
                 showToast('浏览器不支持摄像头', 'error');
                 return;
             }
-
             video.style.display = 'block';
             canvas.style.display = 'none';
             openBtn.style.display = 'none';
             captureBtn.style.display = 'inline-block';
             retryBtn.style.display = 'inline-block';
-
             navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 720 },
                         height: { ideal: 480 } } })
                 .then(function(stream) {
@@ -1576,14 +2128,11 @@
             var video = document.getElementById('video');
             var canvas = document.getElementById('photoCanvas');
             var ctx = canvas.getContext('2d');
-
             canvas.width = 360;
             canvas.height = 240;
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
             var idx = selectedPhotoIdx;
             var templateData = window._templateImages ? window._templateImages[idx] : null;
-
             if (templateData) {
                 var img = new Image();
                 img.onload = function() {
@@ -1628,7 +2177,6 @@
             var video = document.getElementById('video');
             video.style.display = 'none';
             video.srcObject = null;
-
             document.getElementById('camOpenBtn').style.display = 'block';
             document.getElementById('camCaptureBtn').style.display = 'none';
             document.getElementById('camRetryBtn').style.display = 'none';
@@ -1636,7 +2184,7 @@
         }
 
         // ================================================================
-        //  NFC集卡
+        //  NFC 集卡
         // ================================================================
         function renderCards() {
             var container = document.getElementById('cardCollection');
@@ -1646,8 +2194,16 @@
             var html = '';
             for (var i = 0; i < state.maxCards; i++) {
                 var filled = i < count;
-                html += '<div class="card-slot ' + (filled ? 'filled' : '') + '">' + (filled ? '🃏' : (i + 1)) +
-                '</div>';
+                var design = CARD_DESIGNS[i] || CARD_DESIGNS[0];
+                if (filled) {
+                    html += '<div class="card-slot filled" style="background:linear-gradient(145deg, #f5c542, #dba92e);border-color:#c99a2a;">' +
+                        '<span class="slot-emoji">' + design.emoji + '</span>' +
+                        '<span class="slot-label">' + design.name + '</span>' +
+                        '<span class="slot-number">#' + String(i + 1).padStart(2, '0') + '</span></div>';
+                } else {
+                    html += '<div class="card-slot"><span class="slot-emoji">❓</span>' +
+                        '<span class="slot-label">' + (i + 1) + '</span></div>';
+                }
             }
             container.innerHTML = html;
             var lotteryArea = document.getElementById('lotteryArea');
@@ -1661,22 +2217,83 @@
                 showToast('🎉 已集满！快去抽奖吧', '');
                 return;
             }
-            var newCard = '卡' + (state.cards.length + 1);
-            state.cards.push(newCard);
+            var nextIdx = state.cards.length;
+            var design = CARD_DESIGNS[nextIdx];
+            showNfcCard(nextIdx, design);
+        }
+
+        function showNfcCard(idx, design) {
+            pendingCardIndex = idx;
+            var overlay = document.getElementById('nfcOverlay');
+            var card = document.getElementById('nfcCard');
+            var container = document.getElementById('nfcCardContainer');
+
+            card.style.animation = 'none';
+            container.style.animation = 'none';
+            setTimeout(function() {
+                card.style.animation = 'cardFlipIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards';
+                container.style.animation = 'cardFloat 3s ease-in-out infinite';
+            }, 50);
+
+            document.getElementById('cardEmoji').textContent = design.emoji;
+            document.getElementById('cardName').textContent = design.name;
+            document.getElementById('cardSub').textContent = design.sub + ' · 望夏札记';
+            document.getElementById('cardNumber').textContent = '✦ ' + String(idx + 1).padStart(2, '0') + '/10';
+            document.getElementById('cardNumberBadge').textContent = '#' + String(idx + 1).padStart(3, '0');
+            document.getElementById('cardBgPattern').textContent = design.pattern + ' ' + design.pattern + ' ' + design
+                .pattern + ' ' + design.pattern;
+
+            card.className = 'nfc-card';
+            overlay.className = 'nfc-overlay show ' + design.theme;
+
+            if (navigator.vibrate) navigator.vibrate([50, 30, 50, 30, 80]);
+            setTimeout(function() { fireConfetti(); }, 300);
+        }
+
+        function collectCard() {
+            if (isCollecting) return;
+            if (pendingCardIndex < 0 || pendingCardIndex >= state.cards.length) {
+                var idx = state.cards.length;
+                if (idx >= state.maxCards) {
+                    closeNfcCard();
+                    showToast('🎉 已集满所有卡片！', '');
+                    return;
+                }
+                pendingCardIndex = idx;
+            }
+            isCollecting = true;
+
+            var idx = pendingCardIndex;
+            var design = CARD_DESIGNS[idx];
+            var cardName = design.name;
+
+            state.cards.push(idx);
             renderCards();
-            if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
-            showToast('✅ 感应成功！获得 ' + newCard, 'success');
+            closeNfcCard();
+
+            showToast('📥 已收下「' + cardName + '」！', 'success');
             fireConfetti();
+
             if (state.cards.length === state.maxCards) {
                 setTimeout(function() {
                     showToast('🎊 集满10张！获得抽奖机会！', 'success');
                     fireConfetti();
-                }, 500);
-                renderCards();
+                }, 600);
             }
+
+            isCollecting = false;
+            pendingCardIndex = -1;
             if (currentUser.role === 'admin') updateStats();
         }
 
+        function closeNfcCard() {
+            document.getElementById('nfcOverlay').className = 'nfc-overlay';
+            pendingCardIndex = -1;
+        }
+
+        // ================================================================
+        //  抽奖
+        // ================================================================
         function spinWheel() {
             if (state.cards.length < state.maxCards) {
                 showToast('还需 ' + (state.maxCards - state.cards.length) + ' 张卡片', 'error');
@@ -1738,21 +2355,46 @@
         }
 
         // ================================================================
-        //  美食
+        //  美食 - 分类 + 丰富
         // ================================================================
-        function renderFoods() {
+        function renderFoods(category) {
+            var cat = category || currentFoodCategory;
             var container = document.getElementById('foodList');
-            container.innerHTML = state.foods.map(function(f) {
-                return '<div class="food-item" onclick="showToast(\'' + f.desc + '\', \'\')"><img class="food-img" src="' +
-                    f.img +
-                    '" onerror="this.style.display=\'none\'" /><div><strong>' + f.name +
-                    '</strong><div style="font-size:0.65rem;color:#888;">' + f.desc +
-                    '</div></div><span style="margin-left:auto;font-size:0.6rem;background:rgba(0,0,0,0.04);padding:2px 12px;border-radius:30px;">📍</span></div>';
+            var filtered = cat === 'all' ? state.foods : state.foods.filter(function(f) { return f.category === cat; });
+
+            if (filtered.length === 0) {
+                container.innerHTML =
+                    '<div style="text-align:center;padding:30px 0;color:#999;font-size:0.85rem;">🍽️ 暂无该分类美食</div>';
+                return;
+            }
+
+            container.innerHTML = filtered.map(function(f) {
+                var stars = '';
+                var full = Math.floor(f.rating);
+                var half = f.rating % 1 >= 0.5 ? 1 : 0;
+                for (var i = 0; i < full; i++) stars += '★';
+                if (half) stars += '½';
+                for (var i = full + half; i < 5; i++) stars += '☆';
+
+                return '<div class="food-item" onclick="focusOnFood(\'' + f.name + '\');showPage(\'photoPage\')">' +
+                    '<img class="food-img" src="' + f.img +
+                    '" onerror="this.style.display=\'none\'" />' +
+                    '<div class="food-info"><div class="name">' + f.name +
+                    ' <span class="food-rating">' + stars + ' ' + f.rating.toFixed(1) + '</span></div>' +
+                    '<div class="desc">' + f.desc + '</div>' +
+                    '<div class="tags"><span>' + f.category + '</span></div></div>' +
+                    '<button class="food-loc-btn" onclick="event.stopPropagation();focusOnFood(\'' + f.name +
+                    '\');showPage(\'photoPage\')"><i class="fas fa-map-pin"></i> 地图</button></div>';
             }).join('');
+
+            // 更新分类标签高亮
+            document.querySelectorAll('.food-cat-tab').forEach(function(tab) {
+                tab.classList.toggle('active', tab.dataset.cat === cat);
+            });
         }
 
         // ================================================================
-        //  管理后台
+        //  管理后台 - 店铺管理
         // ================================================================
         function updateStats() {
             document.getElementById('statUsers').innerText = Math.floor(100 + Math.random() * 80);
@@ -1791,8 +2433,8 @@
                 got: false,
                 count: 0,
                 threshold: 30,
-                lng: 113.54,
-                lat: 22.19
+                lng: 113.54 + (Math.random() - 0.5) * 0.02,
+                lat: 22.19 + (Math.random() - 0.5) * 0.02
             });
             document.getElementById('newShopName').value = '';
             renderShops();
@@ -1809,15 +2451,66 @@
         }
 
         // ================================================================
+        //  管理后台 - 美食管理
+        // ================================================================
+        function renderAdminFoodList() {
+            var container = document.getElementById('adminFoodList');
+            container.innerHTML = state.foods.map(function(f, idx) {
+                return '<div class="admin-shop-item"><span>' + f.name + ' <span class="tag-sm">' + f.category +
+                    '</span></span><span style="font-size:0.65rem;color:#888;">' + f.desc +
+                    '</span><div><button class="btn-danger" onclick="removeFood(' + idx +
+                    ')">删</button></div></div>';
+            }).join('');
+        }
+
+        function addFood() {
+            var name = document.getElementById('newFoodName').value.trim();
+            var desc = document.getElementById('newFoodDesc').value.trim();
+            if (!name || !desc) { showToast('请输入名称和简介', 'error'); return; }
+            var category = document.getElementById('newFoodCategory').value;
+            state.foods.push({
+                name: name,
+                desc: desc,
+                category: category,
+                lng: 113.54 + (Math.random() - 0.5) * 0.025,
+                lat: 22.19 + (Math.random() - 0.5) * 0.025,
+                img: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=200&h=200&fit=crop',
+                rating: 4.0 + Math.random() * 0.8
+            });
+            document.getElementById('newFoodName').value = '';
+            document.getElementById('newFoodDesc').value = '';
+            renderFoods();
+            renderAdminFoodList();
+            showToast('✅ 已添加美食：' + name, 'success');
+        }
+
+        function removeFood(idx) {
+            if (!confirm('删除 "' + state.foods[idx].name + '" ？')) return;
+            state.foods.splice(idx, 1);
+            renderFoods();
+            renderAdminFoodList();
+            showToast('已删除', '');
+        }
+
+        // ================================================================
         //  初始化
         // ================================================================
+        // 美食分类切换事件
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.food-cat-tab').forEach(function(tab) {
+                tab.addEventListener('click', function() {
+                    currentFoodCategory = this.dataset.cat;
+                    renderFoods(currentFoodCategory);
+                });
+            });
+        });
+
         renderAll();
         loadAllResources();
         document.getElementById('userIdDisplay').innerText = '未登录';
 
-        // 检查 Leaflet 是否加载
         if (typeof L === 'undefined') {
-            console.warn('Leaflet 未加载，请检查网络连接');
+            console.warn('Leaflet 未加载');
         }
     </script>
 </body>
