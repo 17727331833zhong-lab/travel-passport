@@ -4,7 +4,11 @@
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>&#26395;&#22799;&#26434;&#35760;</title>
+    <title>望夏札记</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js">
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
@@ -21,40 +25,54 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            overflow: hidden;
         }
         #app {
             width: 100%;
             max-width: 420px;
-            min-height: 700px;
+            min-height: 100vh;
             background: #f5f0eb;
             box-shadow: 0 0 60px rgba(0, 0, 0, 0.5);
-            border-radius: 32px;
             overflow: hidden;
             position: relative;
-            margin: 16px;
-            border: 1px solid rgba(255, 215, 100, 0.2);
+            border: 1px solid rgba(255, 215, 100, 0.15);
         }
+
         .page {
             display: none;
             padding: 24px 20px 30px;
-            animation: fadeUp 0.4s ease;
+            min-height: 100vh;
         }
         .page.active {
             display: block;
+            animation: pageSlideIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
-        @keyframes fadeUp {
+
+        @keyframes pageSlideIn {
             0% {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(30px) scale(0.98);
             }
             100% {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
             }
         }
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.92);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* ===== 登录页 ===== */
         #loginPage {
-            background: linear-gradient(145deg, #0f1a24 0%, #1a2a3a 100%);
-            min-height: 700px;
+            background: linear-gradient(160deg, #0a141e 0%, #1a2a3a 40%, #2a1a1a 100%);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -66,51 +84,75 @@
         }
         #loginPage.active {
             display: flex;
+            animation: fadeInScale 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
         #loginPage::before {
-            content: '';
+            content: '✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 30% 40%, rgba(245, 197, 66, 0.08) 0%, transparent 60%);
-            animation: pulseGlow 8s infinite alternate;
+            top: -20px;
+            left: 0;
+            right: 0;
+            font-size: 2.5rem;
+            letter-spacing: 8px;
+            color: rgba(245, 197, 66, 0.04);
+            line-height: 1.2;
+            transform: rotate(-5deg);
+            pointer-events: none;
         }
-        @keyframes pulseGlow {
-            0% {
-                transform: scale(1);
-                opacity: 0.5;
-            }
-            100% {
-                transform: scale(1.2);
-                opacity: 1;
-            }
+        .login-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle at 20% 80%, rgba(245, 197, 66, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(245, 197, 66, 0.02) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: 1;
         }
         .login-logo {
-            font-size: 3rem;
-            margin-bottom: 10px;
+            font-size: 3.6rem;
+            margin-bottom: 12px;
             position: relative;
             z-index: 2;
+            animation: floatLogo 4s ease-in-out infinite;
+        }
+        @keyframes floatLogo {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
         }
         .login-title {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 300;
-            letter-spacing: 8px;
+            letter-spacing: 12px;
             color: #f5c542;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 2px 40px rgba(245, 197, 66, 0.15);
+        }
+        .login-subtitle {
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.25);
+            letter-spacing: 6px;
+            margin-top: 4px;
             position: relative;
             z-index: 2;
         }
         .login-slogan {
             font-size: 1rem;
-            color: rgba(255, 255, 255, 0.7);
-            letter-spacing: 3px;
-            margin: 16px 0 40px;
-            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 2px;
+            margin: 20px 0 36px;
+            line-height: 2;
             font-weight: 300;
             position: relative;
             z-index: 2;
-            border-top: 1px solid rgba(245, 197, 66, 0.2);
+            border-top: 1px solid rgba(245, 197, 66, 0.1);
             padding-top: 20px;
         }
         .login-slogan span {
@@ -121,24 +163,25 @@
             width: 100%;
             padding: 16px 24px;
             border-radius: 60px;
-            border: 1px solid rgba(255, 215, 100, 0.2);
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 215, 100, 0.15);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
             color: white;
             font-size: 1rem;
             text-align: center;
             letter-spacing: 2px;
-            transition: 0.3s;
+            transition: 0.4s;
             position: relative;
             z-index: 2;
         }
         .login-input:focus {
             border-color: #f5c542;
-            background: rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.1);
             outline: none;
+            box-shadow: 0 0 40px rgba(245, 197, 66, 0.05);
         }
         .login-input::placeholder {
-            color: rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.25);
         }
         .login-btn {
             margin-top: 24px;
@@ -146,24 +189,28 @@
             padding: 16px;
             border: none;
             border-radius: 60px;
-            background: linear-gradient(135deg, #f5c542, #e6b13e);
+            background: linear-gradient(135deg, #f5c542, #dba92e);
             color: #0f1a24;
             font-weight: 700;
             font-size: 1.1rem;
-            letter-spacing: 3px;
+            letter-spacing: 4px;
             cursor: pointer;
-            transition: 0.2s;
-            box-shadow: 0 8px 32px rgba(245, 197, 66, 0.25);
+            transition: 0.3s;
+            box-shadow: 0 8px 40px rgba(245, 197, 66, 0.2);
             position: relative;
             z-index: 2;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 48px rgba(245, 197, 66, 0.3);
         }
         .login-btn:active {
             transform: scale(0.96);
         }
         .admin-login-link {
             margin-top: 30px;
-            font-size: 0.7rem;
-            opacity: 0.25;
+            font-size: 0.65rem;
+            opacity: 0.2;
             cursor: pointer;
             transition: 0.3s;
             color: #fff;
@@ -172,10 +219,10 @@
             letter-spacing: 2px;
         }
         .admin-login-link:hover {
-            opacity: 0.6;
+            opacity: 0.5;
         }
         .admin-login-box {
-            margin-top: 16px;
+            margin-top: 14px;
             width: 100%;
             display: none;
             position: relative;
@@ -183,27 +230,30 @@
         }
         .admin-login-box.show {
             display: block;
+            animation: fadeInScale 0.3s ease forwards;
         }
         .admin-login-box input {
             width: 100%;
             padding: 14px;
             border-radius: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.04);
             color: white;
             text-align: center;
             margin-bottom: 10px;
             backdrop-filter: blur(8px);
         }
         .admin-login-box input::placeholder {
-            color: rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.2);
         }
+
+        /* ===== 底部导航 ===== */
         .bottom-nav {
             display: flex;
             justify-content: space-around;
-            padding: 8px 10px 12px;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
+            padding: 8px 10px 14px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(24px);
             border-top: 1px solid rgba(0, 0, 0, 0.04);
             position: sticky;
             bottom: 0;
@@ -213,17 +263,19 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            color: #999;
-            font-size: 0.6rem;
-            transition: 0.2s;
+            color: #bbb;
+            font-size: 0.55rem;
+            transition: 0.3s;
             cursor: pointer;
-            padding: 4px 8px;
+            padding: 4px 10px;
             border-radius: 30px;
             min-width: 48px;
+            position: relative;
         }
         .nav-item i {
             font-size: 1.3rem;
-            margin-bottom: 2px;
+            margin-bottom: 1px;
+            transition: 0.3s;
         }
         .nav-item.active {
             color: #1a2a3a;
@@ -231,15 +283,18 @@
         }
         .nav-item.active i {
             color: #f5c542;
+            transform: translateY(-2px);
         }
+
+        /* ===== 通用 ===== */
         .card {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
             border-radius: 24px;
             padding: 16px 18px;
-            margin-bottom: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            margin-bottom: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.02);
         }
         .flex-between {
             display: flex;
@@ -254,7 +309,7 @@
             background: transparent;
             padding: 6px 14px;
             border-radius: 40px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             cursor: pointer;
             transition: 0.2s;
         }
@@ -278,7 +333,7 @@
             background: rgba(0, 0, 0, 0.04);
             padding: 4px 14px;
             border-radius: 30px;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #555;
         }
         .mt-12 {
@@ -290,8 +345,10 @@
         .grid-2col {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 14px;
+            gap: 12px;
         }
+
+        /* ===== 主页 ===== */
         .home-header {
             display: flex;
             justify-content: space-between;
@@ -299,68 +356,257 @@
             margin-bottom: 16px;
         }
         .home-header h2 {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-weight: 300;
             color: #1a2a3a;
+            letter-spacing: 2px;
+        }
+        .home-header h2 i {
+            color: #f5c542;
+            margin-right: 4px;
         }
         .home-header .id-badge {
             background: #1a2a3a;
             color: #f5c542;
             padding: 4px 16px;
             border-radius: 40px;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             letter-spacing: 1px;
             font-weight: 600;
         }
         .progress-summary {
             display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
+            gap: 10px;
+            margin-bottom: 18px;
         }
         .progress-item {
             flex: 1;
-            background: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(8px);
             border-radius: 16px;
-            padding: 12px;
+            padding: 12px 6px;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
         .progress-item .num {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             font-weight: 700;
             color: #1a2a3a;
         }
         .progress-item .label {
-            font-size: 0.6rem;
-            color: #888;
-            margin-top: 2px;
+            font-size: 0.55rem;
+            color: #999;
+            margin-top: 1px;
         }
         .func-card {
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(8px);
             border-radius: 20px;
-            padding: 18px 10px;
+            padding: 16px 8px;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            transition: 0.15s;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: 0.2s;
             cursor: pointer;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.01);
         }
         .func-card:active {
-            transform: scale(0.94);
+            transform: scale(0.93);
             background: #f5f0eb;
         }
         .func-card i {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             color: #1a2a3a;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
         .func-card span {
             display: block;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 500;
         }
+
+        /* ===== 地图 (Leaflet) ===== */
+        #mapContainer {
+            width: 100%;
+            height: 360px;
+            border-radius: 24px;
+            overflow: hidden;
+            margin-bottom: 14px;
+            border: 2px solid rgba(255, 215, 100, 0.2);
+            position: relative;
+            background: #e8e2da;
+        }
+        #mapContainer .leaflet-control-zoom {
+            border: none !important;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08) !important;
+        }
+        #mapContainer .leaflet-control-zoom a {
+            background: white !important;
+            color: #1a2a3a !important;
+            border: none !important;
+            border-radius: 8px !important;
+            width: 34px !important;
+            height: 34px !important;
+            line-height: 34px !important;
+            font-size: 16px !important;
+        }
+        #mapContainer .leaflet-control-zoom a:hover {
+            background: #f5f0eb !important;
+        }
+        .custom-marker {
+            background: #1a2a3a;
+            color: #f5c542;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700;
+            border: 2px solid #f5c542;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+            cursor: pointer;
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+        .custom-marker:hover {
+            transform: scale(1.08);
+        }
+        .custom-marker-photo {
+            background: #1a2a3a;
+            color: #f5c542;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+            border: 2px solid #f5c542;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+        .custom-marker-photo:hover {
+            transform: scale(1.08);
+        }
+        .custom-marker-food {
+            background: #c0392b;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 30px;
+            font-size: 10px;
+            font-weight: 600;
+            border: 2px solid white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+        .custom-marker-food:hover {
+            transform: scale(1.08);
+        }
+        .map-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #888;
+            font-size: 0.85rem;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 12px 24px;
+            border-radius: 40px;
+            backdrop-filter: blur(8px);
+        }
+        .map-loading i {
+            margin-right: 8px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ===== 拍照 ===== */
+        .photo-preview {
+            background: #1a1a1a;
+            border-radius: 20px;
+            padding: 12px;
+            text-align: center;
+            margin: 12px 0;
+        }
+        .photo-preview canvas,
+        .photo-preview video {
+            width: 100%;
+            max-height: 340px;
+            border-radius: 12px;
+            background: #0a0a0a;
+        }
+        .photo-preview video {
+            display: block;
+        }
+        .cam-btn {
+            background: linear-gradient(135deg, #1a2a3a, #0f1a24);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 60px;
+            width: 100%;
+            font-weight: 600;
+            font-size: 1rem;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .cam-btn:active {
+            transform: scale(0.96);
+        }
+        .cam-btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 10px;
+            border-radius: 60px;
+            width: 48%;
+            font-weight: 500;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .cam-btn-secondary:active {
+            transform: scale(0.95);
+        }
+
+        /* ===== Toast ===== */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: rgba(26, 42, 58, 0.92);
+            backdrop-filter: blur(16px);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 60px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            pointer-events: none;
+            max-width: 90%;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        .toast.success {
+            border-color: rgba(46, 204, 113, 0.3);
+        }
+        .toast.error {
+            border-color: rgba(231, 76, 60, 0.3);
+        }
+
+        /* ===== 其他 ===== */
         .shop-item {
             display: flex;
             justify-content: space-between;
@@ -380,97 +626,38 @@
             align-items: center;
             gap: 6px;
             flex-wrap: wrap;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
         .shop-name .flag {
             font-size: 0.8rem;
         }
         .shop-desc {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #888;
-            margin-top: 2px;
+            margin-top: 1px;
         }
         .shop-tag {
             background: rgba(0, 0, 0, 0.04);
             padding: 2px 10px;
             border-radius: 30px;
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             color: #666;
         }
         .shop-tag.restock {
             background: #f5d0c0;
             color: #a54f2a;
         }
-        .map-container {
-            background: #e8e2da;
-            border-radius: 24px;
-            height: 220px;
-            position: relative;
-            background-size: cover;
-            background-position: center;
-            margin-bottom: 16px;
-            overflow: hidden;
-            border: 2px solid rgba(255, 215, 100, 0.2);
-        }
-        .map-pin {
-            position: absolute;
-            width: 34px;
-            height: 34px;
-            background: #1a2a3a;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-            border: 2px solid #f5c542;
-            transition: 0.2s;
-        }
-        .map-pin:active {
-            transform: scale(0.85);
-        }
-        .photo-preview {
-            background: #1a1a1a;
-            border-radius: 20px;
-            padding: 12px;
-            text-align: center;
-            margin: 12px 0;
-        }
-        .photo-preview canvas {
-            width: 100%;
-            max-height: 300px;
-            border-radius: 12px;
-            background: #2a2a2a;
-        }
-        .cam-btn {
-            background: linear-gradient(135deg, #1a2a3a, #0f1a24);
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 60px;
-            width: 100%;
-            font-weight: 600;
-            font-size: 1rem;
-            margin: 8px 0;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .cam-btn:active {
-            transform: scale(0.96);
-        }
+
         .card-progress {
             background: rgba(0, 0, 0, 0.05);
             border-radius: 60px;
-            height: 20px;
+            height: 18px;
             overflow: hidden;
-            margin: 12px 0;
+            margin: 10px 0;
         }
         .card-progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, #f5c542, #e6b13e);
+            background: linear-gradient(90deg, #f5c542, #dba92e);
             width: 0%;
             border-radius: 60px;
             transition: 0.6s cubic-bezier(0.22, 1, 0.36, 1);
@@ -478,19 +665,19 @@
         .card-collection {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
-            margin: 12px 0;
+            gap: 5px;
+            margin: 10px 0;
             justify-content: center;
         }
         .card-slot {
-            width: 40px;
-            height: 56px;
+            width: 38px;
+            height: 52px;
             background: rgba(0, 0, 0, 0.04);
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.5rem;
+            font-size: 0.45rem;
             color: #aaa;
             border: 1px dashed #ccc;
             transition: 0.3s;
@@ -500,22 +687,23 @@
             border: 1px solid #c99a2a;
             color: #1a2a3a;
             font-weight: 700;
-            font-size: 1.2rem;
-            box-shadow: 0 4px 12px rgba(245, 197, 66, 0.3);
+            font-size: 1.1rem;
+            box-shadow: 0 4px 16px rgba(245, 197, 66, 0.25);
             transform: translateY(-2px);
         }
+
         .wheel {
             background: conic-gradient(from 0deg, #f5c542, #e6b13e, #dba92e, #f5c542);
             border-radius: 100%;
-            width: 160px;
-            height: 160px;
-            margin: 16px auto;
+            width: 150px;
+            height: 150px;
+            margin: 14px auto;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-direction: column;
             border: 6px solid #1a2a3a;
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
             cursor: pointer;
             transition: 0.3s;
         }
@@ -524,21 +712,22 @@
         }
         .wheel-inner {
             background: white;
-            width: 70px;
-            height: 70px;
+            width: 64px;
+            height: 64px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-direction: column;
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: #1a2a3a;
         }
+
         .qr-box {
             display: flex;
             justify-content: center;
-            margin: 16px 0;
+            margin: 12px 0;
         }
         #qrcode {
             background: white;
@@ -546,6 +735,7 @@
             border-radius: 16px;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
         }
+
         .food-item {
             display: flex;
             align-items: center;
@@ -560,38 +750,39 @@
             border-radius: 12px;
         }
         .food-img {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             border-radius: 12px;
             object-fit: cover;
             background: #eee;
         }
+
         .admin-badge {
             background: #c0392b;
             color: white;
             padding: 2px 12px;
             border-radius: 30px;
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             margin-left: 8px;
         }
         .admin-panel {
             background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(12px);
             border-radius: 24px;
-            padding: 20px;
-            margin-top: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            padding: 18px;
+            margin-top: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
         }
         .admin-panel h4 {
-            font-size: 0.95rem;
-            margin-bottom: 12px;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
             color: #1a2a3a;
         }
         .admin-panel label {
             display: block;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 600;
-            margin: 12px 0 4px;
+            margin: 10px 0 4px;
             color: #444;
         }
         .admin-panel input[type="file"] {
@@ -599,11 +790,11 @@
             padding: 8px;
             border: 1px solid #ddd;
             border-radius: 12px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
         .admin-panel .preview-img img {
             max-width: 100%;
-            max-height: 60px;
+            max-height: 50px;
             border-radius: 8px;
             margin-top: 4px;
             border: 1px solid #eee;
@@ -612,22 +803,22 @@
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             gap: 8px;
-            margin: 12px 0;
+            margin: 10px 0;
         }
         .stat-item {
             background: white;
-            padding: 12px 8px;
+            padding: 10px 6px;
             border-radius: 16px;
             text-align: center;
             border: 1px solid rgba(0, 0, 0, 0.03);
         }
         .stat-item .num {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             font-weight: 700;
             color: #1a2a3a;
         }
         .stat-item .label {
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             color: #888;
         }
         .admin-shop-item {
@@ -636,14 +827,14 @@
             align-items: center;
             padding: 6px 0;
             border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
         .admin-shop-item input {
             padding: 4px 8px;
             border: 1px solid #ddd;
             border-radius: 8px;
             width: 50px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
         .admin-shop-item .btn-danger {
             background: #c0392b;
@@ -651,188 +842,272 @@
             border: none;
             padding: 2px 12px;
             border-radius: 30px;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             cursor: pointer;
+        }
+
+        /* 庆祝动画 */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+            overflow: hidden;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+            animation: confettiFall 3s ease-in forwards;
+        }
+        @keyframes confettiFall {
+            0% {
+                opacity: 1;
+                transform: translateY(-20px) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
+
+        /* ===== Leaflet 弹窗美化 ===== */
+        .leaflet-popup-content-wrapper {
+            border-radius: 16px !important;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12) !important;
+            border: 1px solid rgba(255, 255, 255, 0.5) !important;
+            backdrop-filter: blur(8px) !important;
+            background: rgba(255, 255, 255, 0.9) !important;
+        }
+        .leaflet-popup-tip {
+            background: rgba(255, 255, 255, 0.9) !important;
+        }
+        .leaflet-popup-content {
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif !important;
+            font-size: 14px !important;
+            color: #1a2a3a !important;
+            min-width: 120px !important;
+            padding: 4px 2px !important;
+        }
+        .leaflet-popup-content .popup-title {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        .leaflet-popup-content .popup-btn {
+            background: #1a2a3a;
+            color: #f5c542;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 6px;
+            transition: 0.2s;
+        }
+        .leaflet-popup-content .popup-btn:hover {
+            background: #2a3a4a;
+        }
+        .leaflet-popup-content .popup-desc {
+            font-size: 12px;
+            color: #888;
         }
     </style>
 </head>
 <body>
     <div id="app">
 
+        <!-- ===== Toast ===== -->
+        <div id="toast" class="toast"></div>
+
         <!-- ===== Login ===== -->
         <div id="loginPage" class="page active">
+            <div class="login-pattern"></div>
             <div class="login-logo">&#128214;</div>
-            <div class="login-title">&#26395;&#22799;&#26434;&#35760;</div>
+            <div class="login-title">望夏札记</div>
+            <div class="login-subtitle">— MACAU · 2026 —</div>
             <div class="login-slogan">
-                &#8220;&#29992;&#19968;&#24352;&#31080;&#65292;&#20837;&#19968;&#24231;&#22478;<br />
-                &#23547;&#19968;&#20010;&#20154;&#65292;<span>&#31163;&#24320;&#26102;&#26159;&#25105;&#20204;</span>&#8221;
+                &#8220;用一张票，入一座城<br />
+                寻一个人，<span>离开时是我们</span>&#8221;
             </div>
-            <input type="text" class="login-input" id="ticketInput" placeholder="&#36755;&#20837;&#38376;&#31080;&#32534;&#30721; (&#22914;: M2026-888)" value="M2026-888" />
-            <button class="login-btn" onclick="handleLogin('user')">&#10027; &#24320;&#21551;&#26053;&#31243; &#10027;</button>
-            <div class="admin-login-link" onclick="toggleAdminLogin()">&#8212; &#31649;&#29702;&#20837;&#21475; &#8212;</div>
+            <input type="text" class="login-input" id="ticketInput" placeholder="输入门票编码 (如: M2026-888)" value="M2026-888" />
+            <button class="login-btn" onclick="handleLogin('user')">✦ 开启旅程 ✦</button>
+            <div class="admin-login-link" onclick="toggleAdminLogin()">— 管理入口 —</div>
             <div class="admin-login-box" id="adminLoginBox">
-                <input type="password" id="adminPassword" placeholder="&#31649;&#29702;&#21592;&#23494;&#30721;" />
-                <button class="login-btn" style="margin-top:8px; background:rgba(255,255,255,0.08); backdrop-filter:blur(8px); color:#f5c542; box-shadow:none;" onclick="handleLogin('admin')">&#36827;&#20837;&#31649;&#29702;</button>
+                <input type="password" id="adminPassword" placeholder="管理员密码" />
+                <button class="login-btn" style="margin-top:8px; background:rgba(255,255,255,0.06); color:#f5c542; box-shadow:none;" onclick="handleLogin('admin')">进入管理</button>
             </div>
         </div>
 
         <!-- ===== Home ===== -->
         <div id="homePage" class="page">
             <div class="home-header">
-                <h2>&#128205; &#26395;&#22799;&#26434;&#35760;</h2>
+                <h2><i class="fas fa-map-pin"></i> 望夏札记</h2>
                 <span class="id-badge" id="userIdDisplay">M2026-888</span>
             </div>
-            <div class="progress-summary" id="progressSummary">
-                <div class="progress-item"><div class="num" id="progCards">0/10</div><div class="label">&#38598;&#21345;&#36827;&#24230;</div></div>
-                <div class="progress-item"><div class="num" id="progShops">0/4</div><div class="label">&#25171;&#21345;&#24215;&#38138;</div></div>
-                <div class="progress-item"><div class="num" id="progPrints">2</div><div class="label">&#25171;&#21360;&#27425;&#25968;</div></div>
+            <div class="progress-summary">
+                <div class="progress-item"><div class="num" id="progCards">0/10</div><div class="label">集卡</div></div>
+                <div class="progress-item"><div class="num" id="progShops">0/4</div><div class="label">打卡</div></div>
+                <div class="progress-item"><div class="num" id="progPrints">2</div><div class="label">打印</div></div>
             </div>
             <div class="grid-2col">
-                <div class="func-card" onclick="showPage('shopPage')"><i class="fas fa-store"></i><span>&#21608;&#36793;&#33719;&#21462;</span></div>
-                <div class="func-card" onclick="showPage('photoPage')"><i class="fas fa-camera"></i><span>&#23450;&#28857;&#25293;&#29031;</span></div>
-                <div class="func-card" onclick="showPage('nfcPage')"><i class="fas fa-credit-card"></i><span>NFC&#38598;&#21345;</span></div>
-                <div class="func-card" onclick="showPage('printPage')"><i class="fas fa-print"></i><span>&#30456;&#29255;&#25171;&#21360;</span></div>
-                <div class="func-card" onclick="showPage('foodPage')"><i class="fas fa-utensils"></i><span>&#32654;&#39135;&#22320;&#22270;</span></div>
-                <div class="func-card" onclick="window.open('https://www.dsat.gov.mo/bus/','_blank')"><i class="fas fa-bus"></i><span>&#20132;&#36890;&#32447;&#36335;</span></div>
+                <div class="func-card" onclick="showPage('shopPage')"><i class="fas fa-store"></i><span>周边获取</span></div>
+                <div class="func-card" onclick="showPage('photoPage')"><i class="fas fa-camera"></i><span>定点拍照</span></div>
+                <div class="func-card" onclick="showPage('nfcPage')"><i class="fas fa-credit-card"></i><span>NFC集卡</span></div>
+                <div class="func-card" onclick="showPage('printPage')"><i class="fas fa-print"></i><span>相片打印</span></div>
+                <div class="func-card" onclick="showPage('foodPage')"><i class="fas fa-utensils"></i><span>美食地图</span></div>
+                <div class="func-card" onclick="window.open('https://www.dsat.gov.mo/bus/','_blank')"><i class="fas fa-bus"></i><span>交通线路</span></div>
             </div>
-            <div id="adminEntry" class="hidden" style="margin-top:16px; text-align:center;">
-                <button class="btn-primary" onclick="showPage('adminPage')" style="background:#c0392b;">&#128736;&#65039; &#31649;&#29702;&#21518;&#21488;</button>
+            <div id="adminEntry" class="hidden" style="margin-top:14px; text-align:center;">
+                <button class="btn-primary" onclick="showPage('adminPage')" style="background:#c0392b; font-size:0.85rem;">&#128736;&#65039; 管理后台</button>
             </div>
         </div>
 
         <!-- ===== Shop ===== -->
         <div id="shopPage" class="page">
-            <div class="flex-between"><h3 style="font-weight:600;">&#127970; &#21608;&#36793;&#33719;&#21462;</h3><span onclick="showPage('homePage')" style="cursor:pointer; opacity:0.6;">&#8592; &#36820;&#22238;</span></div>
+            <div class="flex-between"><h3 style="font-weight:600;">🏪 周边获取</h3><span onclick="showPage('homePage')" style="cursor:pointer; opacity:0.5; font-size:0.85rem;">← 返回</span></div>
             <div id="shopList"></div>
         </div>
 
         <!-- ===== Photo ===== -->
         <div id="photoPage" class="page">
-            <div class="flex-between"><h3 style="font-weight:600;">&#128247; &#23450;&#28857;&#25293;&#29031;</h3><span onclick="showPage('homePage')" style="cursor:pointer; opacity:0.6;">&#8592; &#36820;&#22238;</span></div>
-            <div class="map-container" id="mapContainer">
-                <div class="map-pin" style="left:18%; top:25%;" onclick="selectPhotoPoint(0)">A</div>
-                <div class="map-pin" style="left:62%; top:45%;" onclick="selectPhotoPoint(1)">B</div>
-                <div class="map-pin" style="left:32%; top:72%;" onclick="selectPhotoPoint(2)">C</div>
-                <div class="map-pin" style="left:78%; top:22%;" onclick="selectPhotoPoint(3)">D</div>
+            <div class="flex-between"><h3 style="font-weight:600;">📸 定点拍照</h3><span onclick="showPage('homePage')" style="cursor:pointer; opacity:0.5; font-size:0.85rem;">← 返回</span></div>
+            <div id="mapContainer">
+                <div class="map-loading"><i class="fas fa-spinner"></i> 加载地图中...</div>
             </div>
             <div id="photoPointInfo" class="card">
-                <div class="flex-between"><span id="photoPointName" style="font-weight:600;">&#28857;&#20987;&#22320;&#22270;&#28857;&#20301;</span><span id="photoPointCount" class="tag-sm">&#128247; 23&#20154;</span></div>
+                <div class="flex-between"><span id="photoPointName" style="font-weight:600;">点击地图点位</span><span id="photoPointCount" class="tag-sm">📷 23人</span></div>
                 <div id="photoPreviewArea" class="photo-preview hidden">
-                    <canvas id="photoCanvas" width="360" height="240"></canvas>
-                    <button class="cam-btn" onclick="openCamera()"><i class="fas fa-camera"></i> &#21435;&#25293;&#29031;</button>
-                    <p style="font-size:0.6rem; color:#666; margin-top:4px;">&#25293;&#29031;&#21518;&#33258;&#21160;&#21512;&#25104;&#27169;&#26495;&#65292;&#38271;&#25353;&#20445;&#23384;</p>
+                    <canvas id="photoCanvas" width="360" height="240" style="display:none;"></canvas>
+                    <video id="video" autoplay playsinline style="display:none; width:100%; border-radius:12px; background:#0a0a0a;"></video>
+                    <div style="display:flex; gap:10px; justify-content:center; margin-top:8px;">
+                        <button class="cam-btn-secondary" id="camCaptureBtn" onclick="capturePhoto()" style="display:none;"><i class="fas fa-camera"></i> 拍照</button>
+                        <button class="cam-btn-secondary" id="camRetryBtn" onclick="closeCamera()" style="display:none; background:rgba(200,50,50,0.15); border-color:rgba(200,50,50,0.2);">✕ 取消</button>
+                    </div>
+                    <button class="cam-btn" id="camOpenBtn" onclick="openCamera()"><i class="fas fa-camera"></i> 去拍照</button>
+                    <p style="font-size:0.55rem; color:#888; margin-top:4px;">拍照后自动合成模板，长按保存</p>
                 </div>
-                <div id="photoSample" style="background:#e8e2da; border-radius:16px; padding:30px; text-align:center; color:#6b5a48; margin-top:8px; min-height:100px; display:flex; align-items:center; justify-content:center; flex-direction:column;">
-                    <i class="fas fa-image" style="font-size:2rem; opacity:0.3;"></i>
-                    <span style="font-size:0.8rem; margin-top:6px;">&#28857;&#20987;&#28857;&#20301;&#26597;&#30475;&#31034;&#20363;</span>
+                <div id="photoSample" style="background:#e8e2da; border-radius:16px; padding:24px; text-align:center; color:#6b5a48; margin-top:8px; min-height:80px; display:flex; align-items:center; justify-content:center; flex-direction:column;">
+                    <i class="fas fa-image" style="font-size:2rem; opacity:0.2;"></i>
+                    <span style="font-size:0.75rem; margin-top:4px;">点击地图上的点位查看示例</span>
                 </div>
             </div>
-            <video id="video" style="display:none; width:100%; border-radius:16px;" autoplay></video>
         </div>
 
         <!-- ===== NFC ===== -->
         <div id="nfcPage" class="page">
-            <div class="flex-between"><h3 style="font-weight:600;">&#128179; NFC&#38598;&#21345;</h3><span onclick="showPage('homePage')" style="cursor:pointer; opacity:0.6;">&#8592; &#36820;&#22238;</span></div>
+            <div class="flex-between"><h3 style="font-weight:600;">💳 NFC集卡</h3><span onclick="showPage('homePage')" style="cursor:pointer; opacity:0.5; font-size:0.85rem;">← 返回</span></div>
             <div class="card">
-                <div class="flex-between"><span>&#127956; &#38598;&#21345;&#36827;&#24230;</span><span id="cardCountDisplay">0 / 10</span></div>
+                <div class="flex-between"><span>🎴 集卡进度</span><span id="cardCountDisplay">0 / 10</span></div>
                 <div class="card-progress"><div class="card-progress-bar" id="cardProgressBar" style="width:0%;"></div></div>
                 <div class="card-collection" id="cardCollection"></div>
-                <button class="btn-primary" style="width:100%; background:linear-gradient(135deg,#1a2a3a,#2a3a4a);" onclick="simulateNFC()"><i class="fas fa-satellite-dish"></i> &#27169;&#25311;&#24863;&#24212; NFC &#35013;&#32622;</button>
+                <button class="btn-primary" style="width:100%; background:linear-gradient(135deg,#1a2a3a,#2a3a4a);" onclick="simulateNFC()"><i class="fas fa-satellite-dish"></i> 模拟感应 NFC</button>
                 <div id="lotteryArea" class="hidden mt-12">
                     <div class="wheel" onclick="spinWheel()">
-                        <div class="wheel-inner"><span>&#127922;</span><span style="font-size:0.6rem;">&#25277;&#22870;</span></div>
+                        <div class="wheel-inner"><span>🎰</span><span style="font-size:0.5rem;">抽奖</span></div>
                     </div>
-                    <div id="lotteryResult" class="text-center" style="font-weight:600; margin-top:8px;"></div>
+                    <div id="lotteryResult" class="text-center" style="font-weight:600; margin-top:6px;"></div>
                 </div>
             </div>
         </div>
 
         <!-- ===== Print ===== -->
         <div id="printPage" class="page">
-            <div class="flex-between"><h3 style="font-weight:600;">&#128427; &#30456;&#29255;&#25171;&#21360;</h3><span onclick="showPage('homePage')" style="cursor:pointer; opacity:0.6;">&#8592; &#36820;&#22238;</span></div>
+            <div class="flex-between"><h3 style="font-weight:600;">🖨️ 相片打印</h3><span onclick="showPage('homePage')" style="cursor:pointer; opacity:0.5; font-size:0.85rem;">← 返回</span></div>
             <div class="card">
-                <div class="flex-between"><span>&#128455; &#21097;&#20313;&#25171;&#21360;&#27425;&#25968;</span><span id="printCount" style="font-size:2rem; font-weight:300; color:#f5c542;">2</span></div>
-                <div style="display:flex; gap:8px; margin:12px 0; flex-wrap:wrap;">
-                    <button class="btn-outline" onclick="addPrintTask()">&#128228; &#20998;&#20139;&#32676;&#32842; (+1)</button>
-                    <button class="btn-outline" onclick="buyPrint()">&#128176; &#36141;&#20080; 10MOP</button>
+                <div class="flex-between"><span>📇 剩余次数</span><span id="printCount" style="font-size:2rem; font-weight:300; color:#f5c542;">2</span></div>
+                <div style="display:flex; gap:8px; margin:10px 0; flex-wrap:wrap;">
+                    <button class="btn-outline" onclick="addPrintTask()">📤 分享 (+1)</button>
+                    <button class="btn-outline" onclick="buyPrint()">💰 10MOP</button>
                 </div>
                 <div class="qr-box" id="qrcode"></div>
-                <p style="font-size:0.6rem; color:#999; text-align:center;">&#29983;&#25104;&#20108;&#32500;&#30721;&#65292;&#32447;&#19979;&#26680;&#38144;&#25171;&#21360;</p>
+                <p style="font-size:0.55rem; color:#999; text-align:center;">生成二维码，线下核销打印</p>
             </div>
         </div>
 
         <!-- ===== Food ===== -->
         <div id="foodPage" class="page">
-            <div class="flex-between"><h3 style="font-weight:600;">&#127858; &#32654;&#39135;&#22320;&#22270;</h3><span onclick="showPage('homePage')" style="cursor:pointer; opacity:0.6;">&#8592; &#36820;&#22238;</span></div>
+            <div class="flex-between"><h3 style="font-weight:600;">🍜 美食地图</h3><span onclick="showPage('homePage')" style="cursor:pointer; opacity:0.5; font-size:0.85rem;">← 返回</span></div>
             <div id="foodList"></div>
         </div>
 
         <!-- ===== Admin ===== -->
         <div id="adminPage" class="page">
-            <div class="flex-between"><h3 style="font-weight:600;">&#128736;&#65039; &#31649;&#29702; <span class="admin-badge">&#31649;&#29702;&#21592;</span></h3><span onclick="showPage('homePage')" style="cursor:pointer; opacity:0.6;">&#8592; &#36820;&#22238;</span></div>
-            <div class="card"><h4>&#128202; &#23454;&#26102;&#25968;&#25454;</h4><div class="admin-stat"><div class="stat-item"><div class="num" id="statUsers">128</div><div class="label">&#24635;&#29992;&#25143;</div></div><div class="stat-item"><div class="num" id="statCheckins">276</div><div class="label">&#24635;&#25171;&#21345;</div></div><div class="stat-item"><div class="num" id="statCards">45</div><div class="label">&#38598;&#21345;&#24635;&#25968;</div></div></div></div>
-            <div class="admin-panel"><h4>&#128228; &#36164;&#28304;&#31649;&#29702;</h4>
-                <label>&#128506;&#65039; &#22320;&#22270;&#24213;&#22270;</label><input type="file" accept="image/*" onchange="uploadResource('mapBg', this)" />
-                <div id="mapBgPreview" class="preview-img"></div>
-                <label>&#128247; &#27169;&#26495;A (&#22823;&#19977;&#24052;)</label><input type="file" accept="image/*" onchange="uploadResource('template0', this)" />
+            <div class="flex-between"><h3 style="font-weight:600;">🛠️ 管理 <span class="admin-badge">管理员</span></h3><span onclick="showPage('homePage')" style="cursor:pointer; opacity:0.5; font-size:0.85rem;">← 返回</span></div>
+            <div class="card"><h4>📊 实时数据</h4><div class="admin-stat"><div class="stat-item"><div class="num" id="statUsers">128</div><div class="label">总用户</div></div><div class="stat-item"><div class="num" id="statCheckins">276</div><div class="label">总打卡</div></div><div class="stat-item"><div class="num" id="statCards">45</div><div class="label">集卡总数</div></div></div></div>
+            <div class="admin-panel"><h4>📤 资源管理</h4>
+                <label>📸 模板A (大三巴)</label><input type="file" accept="image/*" onchange="uploadResource('template0', this)" />
                 <div id="template0Preview" class="preview-img"></div>
-                <label>&#128247; &#27169;&#26495;B (&#35758;&#20107;&#20141;)</label><input type="file" accept="image/*" onchange="uploadResource('template1', this)" />
+                <label>📸 模板B (议事亭)</label><input type="file" accept="image/*" onchange="uploadResource('template1', this)" />
                 <div id="template1Preview" class="preview-img"></div>
-                <label>&#128247; &#27169;&#26495;C (&#28595;&#38376;&#22612;)</label><input type="file" accept="image/*" onchange="uploadResource('template2', this)" />
+                <label>📸 模板C (澳门塔)</label><input type="file" accept="image/*" onchange="uploadResource('template2', this)" />
                 <div id="template2Preview" class="preview-img"></div>
-                <label>&#128247; &#27169;&#26495;D (&#23448;&#20063;&#34903;)</label><input type="file" accept="image/*" onchange="uploadResource('template3', this)" />
+                <label>📸 模板D (官也街)</label><input type="file" accept="image/*" onchange="uploadResource('template3', this)" />
                 <div id="template3Preview" class="preview-img"></div>
-                <div id="uploadStatus" style="color:#2a7a4a; margin-top:6px; font-size:0.8rem;"></div>
-                <button class="btn-outline" style="margin-top:10px; width:100%;" onclick="clearResources()">&#128465;&#65039; &#28165;&#38500;&#25152;&#26377;&#36164;&#28304;</button>
+                <div id="uploadStatus" style="color:#2a7a4a; margin-top:6px; font-size:0.75rem;"></div>
+                <button class="btn-outline" style="margin-top:10px; width:100%;" onclick="clearResources()">🗑️ 清除所有资源</button>
             </div>
-            <div class="admin-panel"><h4>&#127970; &#24215;&#38138;&#31649;&#29702;</h4>
+            <div class="admin-panel"><h4>🏪 店铺管理</h4>
                 <div id="adminShopList"></div>
                 <div style="display:flex; gap:6px; margin-top:10px; flex-wrap:wrap;">
-                    <input type="text" id="newShopName" placeholder="&#26032;&#24215;&#38138;" style="flex:1; padding:8px; border:1px solid #ddd; border-radius:12px; font-size:0.8rem;" />
-                    <select id="newShopType" style="padding:8px; border:1px solid #ddd; border-radius:12px; font-size:0.8rem;">
-                        <option value="&#23448;&#26041;">&#23448;&#26041;</option>
-                        <option value="&#28040;&#36153;&#24471;">&#28040;&#36153;&#24471;</option>
+                    <input type="text" id="newShopName" placeholder="新店铺" style="flex:1; padding:8px; border:1px solid #ddd; border-radius:12px; font-size:0.75rem;" />
+                    <select id="newShopType" style="padding:8px; border:1px solid #ddd; border-radius:12px; font-size:0.75rem;">
+                        <option value="官方">官方</option>
+                        <option value="消费得">消费得</option>
                     </select>
-                    <button class="btn-primary" onclick="addShop()" style="padding:8px 16px; font-size:0.8rem;">&#28155;&#21152;</button>
+                    <button class="btn-primary" onclick="addShop()" style="padding:8px 16px; font-size:0.75rem;">添加</button>
                 </div>
             </div>
         </div>
 
         <!-- ===== Bottom Nav ===== -->
         <div class="bottom-nav" id="bottomNav" style="display:none;">
-            <div class="nav-item active" onclick="showPage('homePage')"><i class="fas fa-home"></i><span>&#20027;&#39029;</span></div>
-            <div class="nav-item" onclick="showPage('shopPage')"><i class="fas fa-store"></i><span>&#21608;&#36793;</span></div>
-            <div class="nav-item" onclick="showPage('photoPage')"><i class="fas fa-camera"></i><span>&#25293;&#29031;</span></div>
-            <div class="nav-item" onclick="showPage('nfcPage')"><i class="fas fa-credit-card"></i><span>&#38598;&#21345;</span></div>
-            <div class="nav-item" onclick="showPage('printPage')"><i class="fas fa-print"></i><span>&#25171;&#21360;</span></div>
+            <div class="nav-item active" onclick="showPage('homePage')"><i class="fas fa-home"></i><span>主页</span></div>
+            <div class="nav-item" onclick="showPage('shopPage')"><i class="fas fa-store"></i><span>周边</span></div>
+            <div class="nav-item" onclick="showPage('photoPage')"><i class="fas fa-camera"></i><span>拍照</span></div>
+            <div class="nav-item" onclick="showPage('nfcPage')"><i class="fas fa-credit-card"></i><span>集卡</span></div>
+            <div class="nav-item" onclick="showPage('printPage')"><i class="fas fa-print"></i><span>打印</span></div>
         </div>
     </div>
 
     <script>
+        // ================================================================
+        //  全局状态
+        // ================================================================
         var ADMIN_PASSWORD = 'admin123';
         var currentUser = { id: '', role: 'user' };
+        var leafletMap = null;
+        var leafletMarkers = [];
+        var selectedPhotoIdx = 0;
+        var cameraStream = null;
+
         var state = {
             shops: [
-                { id: 0, name: '&#28595;&#38376;&#25991;&#21019;&#39302;', type: '&#23448;&#26041;', got: false, count: 34,
-                    threshold: 50 },
-                { id: 1, name: '&#22823;&#19977;&#24052;&#31036;&#21697;&#24215;', type: '&#28040;&#36153;&#24471;',
-                    got: false, count: 22, threshold: 40 },
-                { id: 2, name: '&#27818;&#20180;&#25163;&#20449;&#22346;', type: '&#23448;&#26041;', got: false,
-                    count: 47, threshold: 50 },
-                { id: 3, name: '&#36335;&#29615;&#21654;&#21857;&#24215;', type: '&#28040;&#36153;&#24471;',
-                    got: false, count: 12, threshold: 30 }
+                { id: 0, name: '澳门文创馆', type: '官方', got: false, count: 34, threshold: 50, lng: 113.54,
+                lat: 22.19 },
+                { id: 1, name: '大三巴礼品店', type: '消费得', got: false, count: 22, threshold: 40, lng: 113.541,
+                    lat: 22.197 },
+                { id: 2, name: '氹仔手信坊', type: '官方', got: false, count: 47, threshold: 50, lng: 113.558,
+                    lat: 22.155 },
+                { id: 3, name: '路环咖啡店', type: '消费得', got: false, count: 12, threshold: 30, lng: 113.566,
+                    lat: 22.126 }
             ],
             photoPoints: [
-                { name: '&#22823;&#19977;&#24052;&#29260;&#22346;',
+                { name: '大三巴牌坊', lng: 113.541, lat: 22.197,
                     sample: 'https://images.unsplash.com/photo-1585664819886-0a9c7d6b9e8c?w=400&h=300&fit=crop',
                     count: 23 },
-                { name: '&#35758;&#20107;&#20141;&#21069;&#22320;',
+                { name: '议事亭前地', lng: 113.539, lat: 22.193,
                     sample: 'https://images.unsplash.com/photo-1599999413215-56e5b9a9d4c8?w=400&h=300&fit=crop',
                     count: 18 },
-                { name: '&#28595;&#38376;&#22612;',
+                { name: '澳门塔', lng: 113.536, lat: 22.179,
                     sample: 'https://images.unsplash.com/photo-1570211776045-3c1c8e8b8f4e?w=400&h=300&fit=crop',
                     count: 31 },
-                { name: '&#23448;&#20063;&#34903;',
+                { name: '官也街', lng: 113.558, lat: 22.155,
                     sample: 'https://images.unsplash.com/photo-1585664819886-0a9c7d6b9e8c?w=400&h=300&fit=crop',
                     count: 9 }
             ],
@@ -842,29 +1117,181 @@
             lotteryPrize: '',
             printCount: 2,
             foods: [
-                { name: '&#23433;&#24503;&#40077;&#34507;&#25427;',
-                    desc: '&#36335;&#29615;&#24635;&#24215;&#65292;&#33993;&#24335;&#34507;&#25427;&#40763;&#31062;',
-                    emoji: '&#129382;',
+                { name: '安德鲁蛋挞', desc: '路环总店，葡式蛋挞鼻祖', lng: 113.566, lat: 22.126,
                     img: 'https://images.unsplash.com/photo-1558618666-fcd25c85f6a2?w=100&h=100&fit=crop' },
-                { name: '&#35802;&#26124;&#27700;&#34697;&#31909;',
-                    desc: '&#27818;&#20180;&#23448;&#20063;&#34903;&#65292;&#25307;&#29260;&#27700;&#34697;&#31909;',
-                    emoji: '&#129408;',
+                { name: '诚昌水蟹粥', desc: '氹仔官也街，招牌水蟹粥', lng: 113.558, lat: 22.155,
                     img: 'https://images.unsplash.com/photo-1579981695585-4a43b5b4f2d8?w=100&h=100&fit=crop' },
-                { name: '&#29275;&#35760;&#21654;&#21719;',
-                    desc: '&#21313;&#21021;&#20116;&#26085;&#34903;&#65292;&#21654;&#21719;&#29275;&#32905;',
-                    emoji: '&#129379;',
+                { name: '牛记咖喱', desc: '十月初五日街，咖喱牛腩', lng: 113.546, lat: 22.189,
                     img: 'https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=100&h=100&fit=crop' },
-                { name: '&#29595;&#22025;&#28872;&#34507;&#25427;',
-                    desc: '&#33993;&#20140;&#38468;&#36817;&#65292;&#32463;&#20856;&#34507;&#25427;', emoji: '&#129382;',
+                { name: '玛嘉烈蛋挞', desc: '葡京附近，经典蛋挞', lng: 113.544, lat: 22.191,
                     img: 'https://images.unsplash.com/photo-1558618666-fcd25c85f6a2?w=100&h=100&fit=crop' }
             ]
         };
-        var RESOURCE_KEYS = ['mapBg', 'template0', 'template1', 'template2', 'template3'];
+
+        // ================================================================
+        //  Toast
+        // ================================================================
+        function showToast(msg, type) {
+            var t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = 'toast ' + (type || '');
+            setTimeout(function() { t.classList.add('show'); }, 50);
+            clearTimeout(t._hide);
+            t._hide = setTimeout(function() { t.classList.remove('show'); }, 2500);
+        }
+
+        // ================================================================
+        //  撒花动画
+        // ================================================================
+        function fireConfetti() {
+            var container = document.createElement('div');
+            container.className = 'confetti-container';
+            document.body.appendChild(container);
+            var colors = ['#f5c542', '#e6b13e', '#c0392b', '#2ecc71', '#3498db', '#e67e22', '#9b59b6'];
+            for (var i = 0; i < 50; i++) {
+                var el = document.createElement('div');
+                el.className = 'confetti';
+                el.style.left = Math.random() * 100 + '%';
+                el.style.background = colors[Math.floor(Math.random() * colors.length)];
+                el.style.width = (4 + Math.random() * 8) + 'px';
+                el.style.height = (4 + Math.random() * 8) + 'px';
+                el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                el.style.animationDuration = (2 + Math.random() * 2) + 's';
+                el.style.animationDelay = Math.random() * 0.8 + 's';
+                container.appendChild(el);
+            }
+            setTimeout(function() { container.remove(); }, 4000);
+        }
+
+        // ================================================================
+        //  Leaflet 地图
+        // ================================================================
+        function initLeafletMap() {
+            var container = document.getElementById('mapContainer');
+
+            // 检查 Leaflet 是否加载
+            if (typeof L === 'undefined') {
+                container.innerHTML =
+                    '<div class="map-loading" style="color:#c0392b;"><i class="fas fa-exclamation-circle"></i> Leaflet 加载失败，请检查网络</div>';
+                return;
+            }
+
+            try {
+                // 移除加载提示
+                var loading = container.querySelector('.map-loading');
+                if (loading) loading.remove();
+
+                // 创建地图
+                leafletMap = L.map(container, {
+                    center: [22.19, 113.54],
+                    zoom: 14,
+                    zoomControl: true,
+                    attributionControl: true
+                });
+
+                // 加载 OpenStreetMap 底图
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(leafletMap);
+
+                // ===== 添加拍照点位 =====
+                state.photoPoints.forEach(function(pt, idx) {
+                    var popupContent = '<div class="popup-title">📸 ' + pt.name + '</div>' +
+                        '<div class="popup-desc">👥 ' + pt.count + ' 人已打卡</div>' +
+                        '<button class="popup-btn" onclick="selectPhotoPointFromMap(' + idx +
+                        ')">去拍照</button>';
+
+                    var marker = L.marker([pt.lat, pt.lng], {
+                        icon: L.divIcon({
+                            className: '',
+                            html: '<div class="custom-marker-photo">' + String.fromCharCode(65 + idx) +
+                                '</div>',
+                            iconSize: [40, 30],
+                            iconAnchor: [20, 30]
+                        })
+                    }).addTo(leafletMap);
+
+                    marker.bindPopup(popupContent, {
+                        maxWidth: 200,
+                        className: 'photo-popup'
+                    });
+
+                    leafletMarkers.push(marker);
+                });
+
+                // ===== 添加美食点位 =====
+                state.foods.forEach(function(f) {
+                    var popupContent = '<div class="popup-title">🍜 ' + f.name + '</div>' +
+                        '<div class="popup-desc">' + f.desc + '</div>';
+
+                    var marker = L.marker([f.lat, f.lng], {
+                        icon: L.divIcon({
+                            className: '',
+                            html: '<div class="custom-marker-food">' + f.name.replace(/[蛋挞粥饭]/g, '') +
+                                '</div>',
+                            iconSize: [50, 22],
+                            iconAnchor: [25, 22]
+                        })
+                    }).addTo(leafletMap);
+
+                    marker.bindPopup(popupContent, {
+                        maxWidth: 200
+                    });
+                    leafletMarkers.push(marker);
+                });
+
+                // ===== 定位用户 =====
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        function(pos) {
+                            var userLat = pos.coords.latitude;
+                            var userLng = pos.coords.longitude;
+                            leafletMap.setView([userLat, userLng], 15);
+
+                            // 添加用户位置标记
+                            var userMarker = L.marker([userLat, userLng], {
+                                icon: L.divIcon({
+                                    className: '',
+                                    html: '<div style="background:#1a2a3a;color:white;padding:4px 12px;border-radius:30px;font-size:12px;font-weight:600;border:2px solid #f5c542;box-shadow:0 4px 16px rgba(0,0,0,0.2);">📍 我在这里</div>',
+                                    iconSize: [80, 26],
+                                    iconAnchor: [40, 26]
+                                })
+                            }).addTo(leafletMap);
+
+                            showToast('📍 已定位到你的位置', 'success');
+                        },
+                        function() {
+                            // 定位失败，使用默认中心
+                            showToast('📍 已加载澳门地图', '');
+                        }, {
+                            enableHighAccuracy: true,
+                            timeout: 8000
+                        }
+                    );
+                } else {
+                    showToast('📍 已加载澳门地图', '');
+                }
+
+                // 延迟刷新
+                setTimeout(function() {
+                    if (leafletMap) leafletMap.invalidateSize();
+                }, 500);
+
+            } catch (e) {
+                container.innerHTML = '<div class="map-loading" style="color:#c0392b;"><i class="fas fa-exclamation-circle"></i> 地图加载失败: ' +
+                    e.message + '</div>';
+            }
+        }
+
+        // ================================================================
+        //  资源管理
+        // ================================================================
+        var RESOURCE_KEYS = ['template0', 'template1', 'template2', 'template3'];
 
         function getResource(key) { try { return localStorage.getItem('res_' + key); } catch (e) { return null; } }
 
-        function setResource(key, data) { try { localStorage.setItem('res_' + key, data); } catch (e) { alert(
-                '\u5b58\u50a8\u5931\u8d25'); } }
+        function setResource(key, data) { try { localStorage.setItem('res_' + key, data); } catch (e) {} }
 
         function uploadResource(key, input) {
             var file = input.files[0];
@@ -873,19 +1300,16 @@
             reader.onload = function(e) {
                 var dataUrl = e.target.result;
                 setResource(key, dataUrl);
-                document.getElementById('uploadStatus').innerText = '\u2705 ' + key + ' \u4e0a\u4f20\u6210\u529f\uff01';
+                document.getElementById('uploadStatus').innerText = '✅ ' + key + ' 上传成功！';
                 applyResource(key, dataUrl);
-                var previewId = key + 'Preview';
-                var previewEl = document.getElementById(previewId);
+                var previewEl = document.getElementById(key + 'Preview');
                 if (previewEl) previewEl.innerHTML = '<img src="' + dataUrl + '" />';
-                if (key === 'mapBg') document.getElementById('mapContainer').style.backgroundImage = 'url(' + dataUrl +
-                    ')';
+                showToast(key + ' 上传成功 ✅', 'success');
             };
             reader.readAsDataURL(file);
         }
 
         function applyResource(key, dataUrl) {
-            if (key === 'mapBg') document.getElementById('mapContainer').style.backgroundImage = 'url(' + dataUrl + ')';
             if (key.startsWith('template')) {
                 var idx = parseInt(key.replace('template', ''));
                 if (!isNaN(idx)) { window._templateImages = window._templateImages || {};
@@ -898,8 +1322,7 @@
                 var data = getResource(key);
                 if (data) {
                     applyResource(key, data);
-                    var previewId = key + 'Preview';
-                    var previewEl = document.getElementById(previewId);
+                    var previewEl = document.getElementById(key + 'Preview');
                     if (previewEl) previewEl.innerHTML = '<img src="' + data + '" />';
                 }
             });
@@ -910,43 +1333,76 @@
             }
         }
 
-        function clearResources() { if (!confirm('\u786e\u5b9a\u6e05\u9664\u6240\u6709\u4e0a\u4f20\u8d44\u6e90\uff1f'))
-                return;
+        function clearResources() {
+            if (!confirm('确定清除所有上传资源？')) return;
             RESOURCE_KEYS.forEach(function(key) { localStorage.removeItem('res_' + key); });
-            location.reload(); }
+            showToast('已清除所有资源', '');
+            setTimeout(function() { location.reload(); }, 500);
+        }
 
+        // ================================================================
+        //  登录
+        // ================================================================
         function toggleAdminLogin() { document.getElementById('adminLoginBox').classList.toggle('show'); }
 
         function handleLogin(role) {
             if (role === 'admin') {
                 var pwd = document.getElementById('adminPassword').value;
-                if (pwd !== ADMIN_PASSWORD) { alert('\u274c \u5bc6\u7801\u9519\u8bef'); return; }
+                if (pwd !== ADMIN_PASSWORD) { showToast('❌ 密码错误', 'error'); return; }
                 currentUser = { id: 'ADMIN', role: 'admin' };
                 enterApp('admin');
                 return;
             }
             var val = document.getElementById('ticketInput').value.trim();
-            if (val.length < 3) { alert('\u8bf7\u8f93\u5165\u6709\u6548\u95e8\u7968\u7f16\u7801'); return; }
+            if (val.length < 3) { showToast('请输入有效门票编码', 'error'); return; }
             currentUser = { id: val, role: 'user' };
             enterApp('user');
         }
 
         function enterApp(role) {
-            document.getElementById('userIdDisplay').innerText = currentUser.id;
             document.getElementById('loginPage').classList.remove('active');
+            document.getElementById('loginPage').style.display = 'none';
+
             document.getElementById('homePage').classList.add('active');
             document.getElementById('bottomNav').style.display = 'flex';
+
+            document.getElementById('userIdDisplay').innerText = currentUser.id;
+
             if (role === 'admin') {
                 document.getElementById('adminEntry').classList.remove('hidden');
                 document.getElementById('userIdDisplay').innerHTML = currentUser.id +
-                    ' <span style="background:#c0392b; padding:0 10px; border-radius:30px; font-size:0.6rem; color:#fff;">\u7ba1\u7406</span>';
+                    ' <span style="background:#c0392b;padding:0 10px;border-radius:30px;font-size:0.55rem;color:#fff;">管理</span>';
                 renderAdminShopList();
                 updateStats();
             } else {
                 document.getElementById('adminEntry').classList.add('hidden');
             }
+
             renderAll();
             loadAllResources();
+
+            // 延迟加载地图
+            setTimeout(function() {
+                if (typeof L !== 'undefined') {
+                    initLeafletMap();
+                } else {
+                    // 如果 Leaflet 还没加载完，等待后重试
+                    var retryCount = 0;
+                    var checkLeaflet = setInterval(function() {
+                        retryCount++;
+                        if (typeof L !== 'undefined') {
+                            clearInterval(checkLeaflet);
+                            initLeafletMap();
+                        } else if (retryCount > 10) {
+                            clearInterval(checkLeaflet);
+                            document.getElementById('mapContainer').innerHTML =
+                                '<div class="map-loading" style="color:#c0392b;"><i class="fas fa-exclamation-circle"></i> 地图加载超时，请刷新重试</div>';
+                        }
+                    }, 500);
+                }
+            }, 400);
+
+            showToast('👋 欢迎回来，' + currentUser.id, 'success');
         }
 
         function renderAll() { renderShops();
@@ -958,10 +1414,12 @@
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
             document.getElementById(pageId).classList.add('active');
+
             document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
             var map = { homePage: 0, shopPage: 1, photoPage: 2, nfcPage: 3, printPage: 4 };
             var idx = map[pageId];
             if (idx !== undefined) document.querySelectorAll('.nav-item')[idx]?.classList.add('active');
+
             if (pageId === 'shopPage') renderShops();
             if (pageId === 'nfcPage') renderCards();
             if (pageId === 'foodPage') renderFoods();
@@ -969,9 +1427,21 @@
             if (pageId === 'adminPage') { renderAdminShopList();
                 updateStats(); }
             if (pageId === 'homePage') updateProgress();
+            if (pageId === 'photoPage') {
+                setTimeout(function() {
+                    if (leafletMap) {
+                        leafletMap.invalidateSize();
+                    } else if (typeof L !== 'undefined') {
+                        initLeafletMap();
+                    }
+                }, 300);
+            }
             window.scrollTo(0, 0);
         }
 
+        // ================================================================
+        //  进度
+        // ================================================================
         function updateProgress() {
             document.getElementById('progCards').innerText = state.cards.length + '/10';
             var got = state.shops.filter(function(s) { return s.got; }).length;
@@ -979,42 +1449,62 @@
             document.getElementById('progPrints').innerText = state.printCount;
         }
 
+        // ================================================================
+        //  周边
+        // ================================================================
         function renderShops() {
             var container = document.getElementById('shopList');
             container.innerHTML = state.shops.map(function(shop, idx) {
-                var flag = shop.got ? '\u1f6a9' : '\u1f3f3\ufe0f';
+                var flag = shop.got ? '🚩' : '🏳️';
                 var flagColor = shop.got ? 'style="color:#2a7a4a;"' : 'style="color:#ccc;"';
                 var restock = shop.count >= shop.threshold ?
-                    '<span class="shop-tag restock">\ud83d\udd25 \u5f85\u8865\u8d27</span>' : '';
+                    '<span class="shop-tag restock">🔥 待补货</span>' : '';
                 return '<div class="shop-item"><div class="shop-info"><div class="shop-name"><span class="flag" ' +
                     flagColor + '>' + flag + '</span>' + shop.name + '<span class="shop-tag">' + shop.type +
                     '</span>' + restock +
-                    '</div><div class="shop-desc">\ud83d\udc65 ' + shop.count +
-                    '\u4eba\u5df2\u6253\u5361</div></div><div><button class="btn-outline" onclick="toggleShopGot(' +
-                    idx + ')">' + (shop.got ? '\u2705 \u5df2\u83b7\u53d6' : '\u2b1c \u672a\u83b7\u53d6') +
-                    '</button></div></div>';
+                    '</div><div class="shop-desc">👥 ' + shop.count + '人已打卡</div></div><div><button class="btn-outline" onclick="toggleShopGot(' +
+                    idx + ')">' + (shop.got ? '✅ 已获取' : '⬜ 未获取') + '</button></div></div>';
             }).join('');
         }
 
         function toggleShopGot(idx) {
             state.shops[idx].got = !state.shops[idx].got;
-            if (state.shops[idx].got) state.shops[idx].count = Math.min(state.shops[idx].count + 1, state.shops[idx]
-                .threshold + 5);
+            if (state.shops[idx].got) {
+                state.shops[idx].count = Math.min(state.shops[idx].count + 1, state.shops[idx].threshold + 5);
+                showToast('✅ 打卡成功：' + state.shops[idx].name, 'success');
+            }
             renderShops();
             updateProgress();
             if (currentUser.role === 'admin') updateStats();
         }
-        var selectedPhotoIdx = 0;
+
+        // ================================================================
+        //  拍照 - 选点
+        // ================================================================
+        function selectPhotoPointFromMap(idx) {
+            // 关闭地图弹窗
+            if (leafletMap) {
+                leafletMap.closePopup();
+            }
+            selectPhotoPoint(idx);
+        }
 
         function selectPhotoPoint(idx) {
             selectedPhotoIdx = idx;
             var pt = state.photoPoints[idx];
             document.getElementById('photoPointName').innerText = pt.name;
-            document.getElementById('photoPointCount').innerText = '\ud83d\udcf7 ' + pt.count + '\u4eba\u62cd\u6444';
+            document.getElementById('photoPointCount').innerText = '📷 ' + pt.count + '人拍摄';
             document.getElementById('photoSample').innerHTML = '<img src="' + pt.sample +
-                '" style="width:100%; max-height:140px; object-fit:cover; border-radius:12px;" /><div style="font-size:0.7rem; color:#888; margin-top:4px;">\u70b9\u51fb\u300c\u53bb\u62cd\u7167\u300d\u5408\u6210\u6a21\u677f</div>';
+                '" style="width:100%;max-height:120px;object-fit:cover;border-radius:12px;" /><div style="font-size:0.65rem;color:#888;margin-top:4px;">点击「去拍照」合成模板</div>';
+
+            // 移动地图到该点
+            if (leafletMap) {
+                leafletMap.setView([pt.lat, pt.lng], 16);
+            }
+
             document.getElementById('photoPreviewArea').classList.remove('hidden');
             applyTemplateToCanvas(idx);
+            showToast('📍 已选择：' + pt.name, '');
         }
 
         function applyTemplateToCanvas(idx) {
@@ -1026,47 +1516,74 @@
                 var img = new Image();
                 img.onload = function() {
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    ctx.fillStyle = 'rgba(255,255,255,0.6)';
-                    ctx.font = '14px sans-serif';
-                    ctx.fillText('\ud83d\udcf8 \u62cd\u7167\u5408\u6210', 16, 28);
+                    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+                    ctx.font = '13px sans-serif';
+                    ctx.fillText('📸 模板已加载', 14, 26);
                 };
                 img.src = templateData;
             } else {
                 ctx.fillStyle = '#2a2a3a';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 ctx.fillStyle = '#f5c542';
-                ctx.font = '16px sans-serif';
-                ctx.fillText('\ud83d\udcf8 \u4e0a\u4f20\u6a21\u677f\u66f4\u7cbe\u5f69', 90, 120);
+                ctx.font = '15px sans-serif';
+                ctx.fillText('📸 上传模板更精彩', 100, 120);
+                ctx.fillStyle = '#888';
+                ctx.font = '11px sans-serif';
+                ctx.fillText('管理员后台可上传', 120, 145);
             }
         }
 
+        // ================================================================
+        //  拍照 - 摄像头
+        // ================================================================
         function openCamera() {
-            var video = document.getElementById('video'),
-                canvas = document.getElementById('photoCanvas'),
-                ctx = canvas.getContext('2d');
-            if (!navigator.mediaDevices?.getUserMedia) { alert('\u6d4f\u89c8\u5668\u4e0d\u652f\u6301\u6444\u50cf\u5934');
-                return; }
-            if (video.style.display === 'none') {
-                navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
-                    .then(function(stream) {
-                        video.srcObject = stream;
-                        video.style.display = 'block';
-                        video.play();
-                        document.querySelector('.cam-btn').innerHTML =
-                            '<i class="fas fa-check"></i> \u6309\u4e0b\u62cd\u7167';
-                        document.querySelector('.cam-btn').onclick = capturePhoto;
-                    })
-                    .catch(function(err) { alert('\u65e0\u6cd5\u8bbf\u95ee\u6444\u50cf\u5934: ' + err.message); });
-            } else { capturePhoto(); }
+            var video = document.getElementById('video');
+            var canvas = document.getElementById('photoCanvas');
+            var openBtn = document.getElementById('camOpenBtn');
+            var captureBtn = document.getElementById('camCaptureBtn');
+            var retryBtn = document.getElementById('camRetryBtn');
+
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                showToast('浏览器不支持摄像头', 'error');
+                return;
+            }
+
+            video.style.display = 'block';
+            canvas.style.display = 'none';
+            openBtn.style.display = 'none';
+            captureBtn.style.display = 'inline-block';
+            retryBtn.style.display = 'inline-block';
+
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 720 },
+                        height: { ideal: 480 } } })
+                .then(function(stream) {
+                    cameraStream = stream;
+                    video.srcObject = stream;
+                    video.play();
+                    showToast('📷 对准目标，点击「拍照」', '');
+                })
+                .catch(function(err) {
+                    showToast('无法访问摄像头: ' + err.message, 'error');
+                    video.style.display = 'none';
+                    canvas.style.display = 'block';
+                    openBtn.style.display = 'block';
+                    captureBtn.style.display = 'none';
+                    retryBtn.style.display = 'none';
+                });
         }
 
         function capturePhoto() {
-            var video = document.getElementById('video'),
-                canvas = document.getElementById('photoCanvas'),
-                ctx = canvas.getContext('2d');
+            var video = document.getElementById('video');
+            var canvas = document.getElementById('photoCanvas');
+            var ctx = canvas.getContext('2d');
+
+            canvas.width = 360;
+            canvas.height = 240;
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            var idx = selectedPhotoIdx,
-                templateData = window._templateImages ? window._templateImages[idx] : null;
+
+            var idx = selectedPhotoIdx;
+            var templateData = window._templateImages ? window._templateImages[idx] : null;
+
             if (templateData) {
                 var img = new Image();
                 img.onload = function() {
@@ -1077,11 +1594,14 @@
                     ctx.lineWidth = 6;
                     ctx.strokeRect(4, 4, canvas.width - 8, canvas.height - 8);
                     ctx.fillStyle = 'rgba(26,42,58,0.7)';
-                    ctx.fillRect(0, canvas.height - 40, canvas.width, 40);
+                    ctx.fillRect(0, canvas.height - 38, canvas.width, 38);
                     ctx.fillStyle = 'white';
-                    ctx.font = 'bold 15px sans-serif';
-                    ctx.fillText('\ud83d\udccd ' + state.photoPoints[idx].name + ' \u00b7 \u671b\u590f\u672d\u8bb0',
-                        16, canvas.height - 12);
+                    ctx.font = 'bold 14px sans-serif';
+                    ctx.fillText('📍 ' + state.photoPoints[idx].name + ' · 望夏札记', 14, canvas.height - 12);
+                    video.style.display = 'none';
+                    canvas.style.display = 'block';
+                    closeCamera();
+                    showToast('✅ 照片已合成！长按保存', 'success');
                 };
                 img.src = templateData;
             } else {
@@ -1089,19 +1609,35 @@
                 ctx.lineWidth = 6;
                 ctx.strokeRect(4, 4, canvas.width - 8, canvas.height - 8);
                 ctx.fillStyle = 'rgba(26,42,58,0.7)';
-                ctx.fillRect(0, canvas.height - 40, canvas.width, 40);
+                ctx.fillRect(0, canvas.height - 38, canvas.width, 38);
                 ctx.fillStyle = 'white';
-                ctx.font = 'bold 15px sans-serif';
-                ctx.fillText('\ud83d\udccd ' + state.photoPoints[idx].name + ' \u00b7 \u671b\u590f\u672d\u8bb0', 16,
-                    canvas.height - 12);
+                ctx.font = 'bold 14px sans-serif';
+                ctx.fillText('📍 ' + state.photoPoints[idx].name + ' · 望夏札记', 14, canvas.height - 12);
+                video.style.display = 'none';
+                canvas.style.display = 'block';
+                closeCamera();
+                showToast('✅ 照片已合成！长按保存', 'success');
             }
-            if (video.srcObject) { video.srcObject.getTracks().forEach(function(t) { t.stop(); });
-                video.style.display = 'none'; }
-            document.querySelector('.cam-btn').innerHTML = '<i class="fas fa-camera"></i> \u91cd\u65b0\u62cd\u7167';
-            document.querySelector('.cam-btn').onclick = openCamera;
-            alert('\u2705 \u7167\u7247\u5df2\u5408\u6210\uff01\u957f\u6309\u4fdd\u5b58');
         }
 
+        function closeCamera() {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(function(t) { t.stop(); });
+                cameraStream = null;
+            }
+            var video = document.getElementById('video');
+            video.style.display = 'none';
+            video.srcObject = null;
+
+            document.getElementById('camOpenBtn').style.display = 'block';
+            document.getElementById('camCaptureBtn').style.display = 'none';
+            document.getElementById('camRetryBtn').style.display = 'none';
+            document.getElementById('photoCanvas').style.display = 'block';
+        }
+
+        // ================================================================
+        //  NFC集卡
+        // ================================================================
         function renderCards() {
             var container = document.getElementById('cardCollection');
             var count = state.cards.length;
@@ -1110,8 +1646,8 @@
             var html = '';
             for (var i = 0; i < state.maxCards; i++) {
                 var filled = i < count;
-                html += '<div class="card-slot ' + (filled ? 'filled' : '') + '">' + (filled ? '\ud83c\udfcf' : (i + 1)) +
-                    '</div>';
+                html += '<div class="card-slot ' + (filled ? 'filled' : '') + '">' + (filled ? '🃏' : (i + 1)) +
+                '</div>';
             }
             container.innerHTML = html;
             var lotteryArea = document.getElementById('lotteryArea');
@@ -1121,71 +1657,103 @@
         }
 
         function simulateNFC() {
-            if (state.cards.length >= state.maxCards) { alert('\ud83c\udf89 \u5df2\u96c6\u6ee1\uff01\u62bd\u5956\u5427');
-                return; }
-            var newCard = '\u5361' + (state.cards.length + 1);
+            if (state.cards.length >= state.maxCards) {
+                showToast('🎉 已集满！快去抽奖吧', '');
+                return;
+            }
+            var newCard = '卡' + (state.cards.length + 1);
             state.cards.push(newCard);
             renderCards();
-            if (navigator.vibrate) navigator.vibrate(30);
-            alert('\u2705 \u611f\u5e94\u6210\u529f\uff01\u83b7\u5f97 ' + newCard);
-            if (state.cards.length === state.maxCards) { alert('\ud83c\udf8a \u96c6\u6ee110\u5f20\uff01\u83b7\u5f97\u62bd\u5956\u673a\u4f1a\uff01');
-                renderCards(); }
+            if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
+            showToast('✅ 感应成功！获得 ' + newCard, 'success');
+            fireConfetti();
+            if (state.cards.length === state.maxCards) {
+                setTimeout(function() {
+                    showToast('🎊 集满10张！获得抽奖机会！', 'success');
+                    fireConfetti();
+                }, 500);
+                renderCards();
+            }
             if (currentUser.role === 'admin') updateStats();
         }
 
         function spinWheel() {
-            if (state.cards.length < state.maxCards) { alert('\u8fd8\u9700 ' + (state.maxCards - state.cards.length) +
-                    ' \u5f20'); return; }
-            if (state.hasLottery) { alert('\u5df2\u62bd\u8fc7\u5956\uff0c\u8bf7\u5230\u4f1a\u573a\u6838\u9500');
-                return; }
-            var prizes = ['\ud83c\udf81 \u6fb3\u95e8\u65c5\u6e38\u5854\u95e8\u7968',
-                '\ud83c\udf81 \u8461\u5f0f\u665a\u9910\u5238', '\ud83c\udf81 \u6587\u521b\u793c\u76d2',
-                '\ud83c\udf81 \u6c34\u821e\u95f4\u8868\u6f14\u7968', '\ud83c\udf81 \u514d\u8d39\u6253\u5370\u5238'
-            ];
+            if (state.cards.length < state.maxCards) {
+                showToast('还需 ' + (state.maxCards - state.cards.length) + ' 张卡片', 'error');
+                return;
+            }
+            if (state.hasLottery) {
+                showToast('已抽过奖，请到会场核销', '');
+                return;
+            }
+            var prizes = ['🎁 澳门旅游塔门票', '🎁 葡式晚餐券', '🎁 文创礼盒', '🎁 水舞间表演票', '🎁 免费打印券'];
             var prize = prizes[Math.floor(Math.random() * prizes.length)];
             state.lotteryPrize = prize;
             state.hasLottery = true;
-            document.getElementById('lotteryResult').innerHTML = '\ud83c\udf89 \u606d\u559c\uff1a<strong>' + prize +
-                '</strong><br/><span style="font-size:0.7rem;">\u6838\u9500\u7801: ' + currentUser.id + '-' + Date
-                .now().toString()
+            document.getElementById('lotteryResult').innerHTML = '🎉 恭喜：<strong>' + prize +
+                '</strong><br/><span style="font-size:0.65rem;">核销码: ' + currentUser.id + '-' + Date.now().toString()
                 .slice(-6) + '</span>';
             var qrDiv = document.createElement('div');
             qrDiv.id = 'lotteryQr';
             document.getElementById('lotteryResult').appendChild(qrDiv);
-            new QRCode(qrDiv, { text: '\u6838\u9500:' + currentUser.id + '-' + prize, width: 80, height: 80 });
-            alert('\ud83c\udf8a \u62bd\u4e2d\uff1a' + prize + '\uff0c\u5230\u4f1a\u573a\u6838\u9500\uff01');
+            try {
+                new QRCode(qrDiv, { text: '核销:' + currentUser.id + '-' + prize, width: 80, height: 80 });
+            } catch (e) {}
+            fireConfetti();
+            showToast('🎊 抽中：' + prize + '！', 'success');
         }
 
+        // ================================================================
+        //  打印
+        // ================================================================
         function updatePrintQr() {
             document.getElementById('printCount').innerText = state.printCount;
             var qr = document.getElementById('qrcode');
             qr.innerHTML = '';
             if (state.printCount > 0) {
-                new QRCode(qr, { text: currentUser.id + '-PRINT-' + Date.now().toString().slice(-4), width: 120,
-                    height: 120 });
+                try {
+                    new QRCode(qr, { text: currentUser.id + '-PRINT-' + Date.now().toString().slice(-4), width: 120,
+                        height: 120 });
+                } catch (e) {}
             } else {
-                qr.innerHTML = '<div style="padding:20px; color:#999;">\u6682\u65e0\u6b21\u6570</div>';
+                qr.innerHTML = '<div style="padding:20px;color:#999;">暂无次数</div>';
             }
             updateProgress();
         }
 
-        function addPrintTask() { if (confirm('\u5206\u4eab\u7fa4\u804a\uff0c\u83b7\u5f97+1\u6b21\uff1f')) { state
-                    .printCount += 1;
-                updatePrintQr(); } }
+        function addPrintTask() {
+            if (confirm('分享到群聊，获得+1次打印机会？')) {
+                state.printCount += 1;
+                updatePrintQr();
+                showToast('✅ +1 打印机会', 'success');
+            }
+        }
 
-        function buyPrint() { if (confirm('10MOP\u8d2d\u4e701\u6b21\uff1f')) { state.printCount += 1;
-                updatePrintQr(); } }
+        function buyPrint() {
+            if (confirm('花费 10 MOP 购买 1 次打印机会？')) {
+                state.printCount += 1;
+                updatePrintQr();
+                showToast('✅ 购买成功', 'success');
+            }
+        }
 
+        // ================================================================
+        //  美食
+        // ================================================================
         function renderFoods() {
             var container = document.getElementById('foodList');
             container.innerHTML = state.foods.map(function(f) {
-                return '<div class="food-item" onclick="alert(\'' + f.desc + '\')"><img class="food-img" src="' + f
-                    .img + '" onerror="this.style.display=\'none\'" /><div><strong>' + f.name +
-                    '</strong><div style="font-size:0.7rem; color:#888;">' + f.desc +
-                    '</div></div><span style="margin-left:auto; font-size:0.65rem; background:rgba(0,0,0,0.04); padding:2px 12px; border-radius:30px;">\ud83d\udccd</span></div>';
+                return '<div class="food-item" onclick="showToast(\'' + f.desc + '\', \'\')"><img class="food-img" src="' +
+                    f.img +
+                    '" onerror="this.style.display=\'none\'" /><div><strong>' + f.name +
+                    '</strong><div style="font-size:0.65rem;color:#888;">' + f.desc +
+                    '</div></div><span style="margin-left:auto;font-size:0.6rem;background:rgba(0,0,0,0.04);padding:2px 12px;border-radius:30px;">📍</span></div>';
             }).join('');
         }
 
+        // ================================================================
+        //  管理后台
+        // ================================================================
         function updateStats() {
             document.getElementById('statUsers').innerText = Math.floor(100 + Math.random() * 80);
             document.getElementById('statCheckins').innerText = state.shops.reduce(function(s, i) { return s + i.count; },
@@ -1197,11 +1765,11 @@
             var container = document.getElementById('adminShopList');
             container.innerHTML = state.shops.map(function(shop, idx) {
                 return '<div class="admin-shop-item"><span>' + shop.name + ' <span class="tag-sm">' + shop.type +
-                    '</span></span><span>\u6253\u5361 ' + shop.count + '/' + shop.threshold +
+                    '</span></span><span>打卡 ' + shop.count + '/' + shop.threshold +
                     '</span><div><input type="number" id="threshold_' + idx + '" value="' + shop.threshold +
                     '" /><button class="btn-outline" onclick="updateThreshold(' + idx +
-                    ')" style="margin-left:4px;">\u66f4\u65b0</button><button class="btn-danger" onclick="removeShop(' +
-                    idx + ')">\u5220</button></div></div>';
+                    ')" style="margin-left:4px;">更新</button><button class="btn-danger" onclick="removeShop(' +
+                    idx + ')">删</button></div></div>';
             }).join('');
         }
 
@@ -1210,28 +1778,47 @@
             if (val > 0) { state.shops[idx].threshold = val;
                 renderShops();
                 renderAdminShopList();
-                alert('\u2705 \u5df2\u66f4\u65b0'); }
+                showToast('✅ 阈值已更新', 'success'); }
         }
 
         function addShop() {
             var name = document.getElementById('newShopName').value.trim();
-            if (!name) { alert('\u8bf7\u8f93\u5165\u540d\u79f0'); return; }
-            state.shops.push({ id: Date.now(), name: name, type: document.getElementById('newShopType').value, got: false,
-                count: 0, threshold: 30 });
+            if (!name) { showToast('请输入店铺名称', 'error'); return; }
+            state.shops.push({
+                id: Date.now(),
+                name: name,
+                type: document.getElementById('newShopType').value,
+                got: false,
+                count: 0,
+                threshold: 30,
+                lng: 113.54,
+                lat: 22.19
+            });
             document.getElementById('newShopName').value = '';
             renderShops();
             renderAdminShopList();
-            alert('\u2705 \u5df2\u6dfb\u52a0');
+            showToast('✅ 已添加：' + name, 'success');
         }
 
-        function removeShop(idx) { if (!confirm('\u5220\u9664 "' + state.shops[idx].name + '" \uff1f')) return;
+        function removeShop(idx) {
+            if (!confirm('删除 "' + state.shops[idx].name + '" ？')) return;
             state.shops.splice(idx, 1);
             renderShops();
-            renderAdminShopList(); }
+            renderAdminShopList();
+            showToast('已删除', '');
+        }
 
+        // ================================================================
+        //  初始化
+        // ================================================================
         renderAll();
         loadAllResources();
-        document.getElementById('userIdDisplay').innerText = '\u672a\u767b\u5f55';
+        document.getElementById('userIdDisplay').innerText = '未登录';
+
+        // 检查 Leaflet 是否加载
+        if (typeof L === 'undefined') {
+            console.warn('Leaflet 未加载，请检查网络连接');
+        }
     </script>
 </body>
 </html>
