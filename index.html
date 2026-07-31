@@ -3,38 +3,718 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>澳门·旅程通行证</title>
+    <title>澳门 · 旅程通行证</title>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
-        /* ===== 基础样式 ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, system-ui, sans-serif; }
-        body { background: #f5f0eb; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        #app { width: 100%; max-width: 420px; min-height: 700px; background: white; box-shadow: 0 0 30px rgba(0,0,0,0.1); border-radius: 28px; overflow: hidden; position: relative; margin: 16px; }
-        .page { display: none; padding: 20px 18px 30px; animation: fadeUp 0.3s ease; }
+        body { background: #0f1a24; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        
+        #app {
+            width: 100%;
+            max-width: 420px;
+            min-height: 700px;
+            background: #f5f0eb;
+            box-shadow: 0 0 60px rgba(0,0,0,0.5);
+            border-radius: 32px;
+            overflow: hidden;
+            position: relative;
+            margin: 16px;
+            border: 1px solid rgba(255,215,100,0.2);
+        }
+        .page { display: none; padding: 24px 20px 30px; animation: fadeUp 0.4s ease; }
         .page.active { display: block; }
-        @keyframes fadeUp { 0% { opacity: 0.4; transform: translateY(12px); } 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
         
         /* ===== 登录页 ===== */
-        #loginPage { background: linear-gradient(145deg, #1a2a3a 0%, #0f1a24 100%); min-height: 700px; color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 30px; border-radius: 28px; }
+        #loginPage {
+            background: linear-gradient(145deg, #0f1a24 0%, #1a2a3a 100%);
+            min-height: 700px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
         #loginPage.active { display: flex; }
-        .login-title { font-size: 2.4rem; font-weight: 300; letter-spacing: 6px; margin-bottom: 8px; }
-        .login-sub { font-size: 0.9rem; opacity: 0.7; margin-bottom: 40px; letter-spacing: 2px; }
-        .login-input { width: 100%; padding: 16px 20px; border-radius: 60px; border: none; background: rgba(255,255,255,0.12); backdrop-filter: blur(8px); color: white; font-size: 1.1rem; text-align: center; letter-spacing: 4px; outline: 1px solid rgba(255,215,100,0.3); transition: 0.3s; }
-        .login-input:focus { outline: 1px solid #f5c542; background: rgba(255,255,255,0.2); }
-        .login-input::placeholder { color: rgba(255,255,255,0.4); letter-spacing: 2px; }
-        .login-btn { margin-top: 30px; width: 100%; padding: 16px; border: none; border-radius: 60px; background: #f5c542; color: #1a2a3a; font-weight: 700; font-size: 1.2rem; letter-spacing: 2px; cursor: pointer; transition: 0.2s; box-shadow: 0 8px 24px rgba(245,197,66,0.3); }
+        #loginPage::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 40%, rgba(245,197,66,0.08) 0%, transparent 60%);
+            animation: pulseGlow 8s infinite alternate;
+        }
+        @keyframes pulseGlow { 0% { transform: scale(1); opacity: 0.5; } 100% { transform: scale(1.2); opacity: 1; } }
+        .login-logo { font-size: 3rem; margin-bottom: 10px; position: relative; z-index: 2; }
+        .login-title { font-size: 2rem; font-weight: 300; letter-spacing: 8px; color: #f5c542; position: relative; z-index: 2; }
+        .login-slogan { 
+            font-size: 1rem; 
+            color: rgba(255,255,255,0.7); 
+            letter-spacing: 3px; 
+            margin: 16px 0 40px;
+            line-height: 1.8;
+            font-weight: 300;
+            position: relative;
+            z-index: 2;
+            border-top: 1px solid rgba(245,197,66,0.2);
+            padding-top: 20px;
+        }
+        .login-slogan span { color: #f5c542; font-weight: 400; }
+        .login-input {
+            width: 100%;
+            padding: 16px 24px;
+            border-radius: 60px;
+            border: 1px solid rgba(255,215,100,0.2);
+            background: rgba(255,255,255,0.06);
+            backdrop-filter: blur(12px);
+            color: white;
+            font-size: 1rem;
+            text-align: center;
+            letter-spacing: 2px;
+            transition: 0.3s;
+            position: relative;
+            z-index: 2;
+        }
+        .login-input:focus { border-color: #f5c542; background: rgba(255,255,255,0.12); outline: none; }
+        .login-input::placeholder { color: rgba(255,255,255,0.3); }
+        .login-btn {
+            margin-top: 24px;
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 60px;
+            background: linear-gradient(135deg, #f5c542, #e6b13e);
+            color: #0f1a24;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 8px 32px rgba(245,197,66,0.25);
+            position: relative;
+            z-index: 2;
+        }
         .login-btn:active { transform: scale(0.96); }
-        .admin-login-link { margin-top: 30px; font-size: 0.7rem; opacity: 0.3; cursor: pointer; transition: 0.3s; }
-        .admin-login-link:hover { opacity: 0.7; }
-        .admin-login-box { margin-top: 20px; width: 100%; display: none; }
+        .admin-login-link { 
+            margin-top: 30px; 
+            font-size: 0.7rem; 
+            opacity: 0.25; 
+            cursor: pointer; 
+            transition: 0.3s;
+            color: #fff;
+            position: relative;
+            z-index: 2;
+            letter-spacing: 2px;
+        }
+        .admin-login-link:hover { opacity: 0.6; }
+        .admin-login-box { margin-top: 16px; width: 100%; display: none; position: relative; z-index: 2; }
         .admin-login-box.show { display: block; }
-        .admin-login-box input { width: 100%; padding: 12px; border-radius: 40px; border: none; background: rgba(255,255,255,0.15); color: white; text-align: center; margin-bottom: 10px; }
-        .admin-login-box input::placeholder { color: rgba(255,255,255,0.4); }
+        .admin-login-box input { 
+            width: 100%; 
+            padding: 14px; 
+            border-radius: 40px; 
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            text-align: center;
+            margin-bottom: 10px;
+            backdrop-filter: blur(8px);
+        }
+        .admin-login-box input::placeholder { color: rgba(255,255,255,0.3); }
         
         /* ===== 底部导航 ===== */
-        .bottom-nav { display: flex; justify-content: space-around; padding: 10px 12px 14px; background: white; border-top: 1px solid #eee; position: sticky; bottom: 0; z-index: 20; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: #999; font-size: 0.65rem; transition: 0.2s; cursor: pointer; padding: 4px 8px; border-radius: 30px; min-width: 52px; }
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 10px 12px;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(0,0,0,0.04);
+            position: sticky;
+            bottom: 0;
+            z-index: 20;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #999;
+            font-size: 0.6rem;
+            transition: 0.2s;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 30px;
+            min-width: 48px;
+        }
+        .nav-item i { font-size: 1.3rem; margin-bottom: 2px; }
+        .nav-item.active { color: #1a2a3a; font-weight: 600; }
+        .nav-item.active i { color: #f5c542; }
+        
+        /* ===== 通用组件 ===== */
+        .card { background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); border-radius: 24px; padding: 16px 18px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.6); box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
+        .card-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; }
+        .hidden { display: none !important; }
+        .btn-outline { border: 1px solid #ddd; background: transparent; padding: 6px 14px; border-radius: 40px; font-size: 0.75rem; cursor: pointer; transition: 0.2s; }
+        .btn-outline:active { transform: scale(0.95); }
+        .btn-primary { background: #1a2a3a; color: white; border: none; padding: 10px 20px; border-radius: 60px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .btn-primary:active { transform: scale(0.96); }
+        .tag-sm { background: rgba(0,0,0,0.04); padding: 4px 14px; border-radius: 30px; font-size: 0.7rem; color: #555; }
+        .mt-12 { margin-top: 12px; }
+        .text-center { text-align: center; }
+        .grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .badge-gold { background: #f5c542; color: #1a2a3a; padding: 2px 12px; border-radius: 30px; font-size: 0.6rem; font-weight: 700; }
+        
+        /* ===== 主页 ===== */
+        .home-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .home-header h2 { font-size: 1.4rem; font-weight: 300; color: #1a2a3a; }
+        .home-header .id-badge { background: #1a2a3a; color: #f5c542; padding: 4px 16px; border-radius: 40px; font-size: 0.7rem; letter-spacing: 1px; font-weight: 600; }
+        .progress-summary { display: flex; gap: 12px; margin-bottom: 20px; }
+        .progress-item { flex: 1; background: rgba(255,255,255,0.6); backdrop-filter: blur(8px); border-radius: 16px; padding: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.4); }
+        .progress-item .num { font-size: 1.6rem; font-weight: 700; color: #1a2a3a; }
+        .progress-item .label { font-size: 0.6rem; color: #888; margin-top: 2px; }
+        .func-card { background: rgba(255,255,255,0.8); backdrop-filter: blur(8px); border-radius: 20px; padding: 18px 10px; text-align: center; border: 1px solid rgba(255,255,255,0.6); transition: 0.15s; cursor: pointer; box-shadow: 0 2px 12px rgba(0,0,0,0.02); }
+        .func-card:active { transform: scale(0.94); background: #f5f0eb; }
+        .func-card i { font-size: 1.8rem; color: #1a2a3a; margin-bottom: 6px; }
+        .func-card span { display: block; font-size: 0.75rem; font-weight: 500; }
+        
+        /* ===== 周边 ===== */
+        .shop-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.04); }
+        .shop-item:last-child { border-bottom: none; }
+        .shop-info { flex: 1; }
+        .shop-name { font-weight: 600; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 0.95rem; }
+        .shop-name .flag { font-size: 0.8rem; }
+        .shop-desc { font-size: 0.7rem; color: #888; margin-top: 2px; }
+        .shop-tag { background: rgba(0,0,0,0.04); padding: 2px 10px; border-radius: 30px; font-size: 0.6rem; color: #666; }
+        .shop-tag.restock { background: #f5d0c0; color: #a54f2a; }
+        
+        /* ===== 拍照 ===== */
+        .map-container { background: #e8e2da; border-radius: 24px; height: 220px; position: relative; background-size: cover; background-position: center; margin-bottom: 16px; overflow: hidden; border: 2px solid rgba(255,215,100,0.2); }
+        .map-pin { position: absolute; width: 34px; height: 34px; background: #1a2a3a; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.3); border: 2px solid #f5c542; transition: 0.2s; }
+        .map-pin:active { transform: scale(0.85); }
+        .photo-preview { background: #1a1a1a; border-radius: 20px; padding: 12px; text-align: center; margin: 12px 0; }
+        .photo-preview canvas { width: 100%; max-height: 300px; border-radius: 12px; background: #2a2a2a; }
+        .cam-btn { background: linear-gradient(135deg, #1a2a3a, #0f1a24); color: white; border: none; padding: 14px; border-radius: 60px; width: 100%; font-weight: 600; font-size: 1rem; margin: 8px 0; cursor: pointer; transition: 0.2s; }
+        .cam-btn:active { transform: scale(0.96); }
+        
+        /* ===== NFC集卡 ===== */
+        .card-progress { background: rgba(0,0,0,0.05); border-radius: 60px; height: 20px; overflow: hidden; margin: 12px 0; }
+        .card-progress-bar { height: 100%; background: linear-gradient(90deg, #f5c542, #e6b13e); width: 0%; border-radius: 60px; transition: 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
+        .card-collection { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; justify-content: center; }
+        .card-slot { width: 40px; height: 56px; background: rgba(0,0,0,0.04); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.5rem; color: #aaa; border: 1px dashed #ccc; transition: 0.3s; }
+        .card-slot.filled { background: linear-gradient(145deg, #f5c542, #dba92e); border: 1px solid #c99a2a; color: #1a2a3a; font-weight: 700; font-size: 1.2rem; box-shadow: 0 4px 12px rgba(245,197,66,0.3); transform: translateY(-2px); }
+        .wheel { background: conic-gradient(from 0deg, #f5c542, #e6b13e, #dba92e, #f5c542); border-radius: 100%; width: 160px; height: 160px; margin: 16px auto; display: flex; align-items: center; justify-content: center; flex-direction: column; border: 6px solid #1a2a3a; box-shadow: 0 8px 40px rgba(0,0,0,0.15); cursor: pointer; transition: 0.3s; }
+        .wheel:active { transform: scale(0.92); }
+        .wheel-inner { background: white; width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-direction: column; font-weight: 700; font-size: 0.9rem; color: #1a2a3a; }
+        
+        /* ===== 打印 ===== */
+        .qr-box { display: flex; justify-content: center; margin: 16px 0; }
+        #qrcode { background: white; padding: 12px; border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); }
+        
+        /* ===== 美食 ===== */
+        .food-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.04); cursor: pointer; transition: 0.2s; }
+        .food-item:active { background: rgba(0,0,0,0.02); border-radius: 12px; }
+        .food-emoji { font-size: 1.8rem; width: 44px; text-align: center; }
+        .food-img { width: 48px; height: 48px; border-radius: 12px; object-fit: cover; background: #eee; }
+        
+        /* ===== 管理后台 ===== */
+        .admin-badge { background: #c0392b; color: white; padding: 2px 12px; border-radius: 30px; font-size: 0.6rem; margin-left: 8px; }
+        .admin-panel { background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); border-radius: 24px; padding: 20px; margin-top: 16px; border: 1px solid rgba(255,255,255,0.6); }
+        .admin-panel h4 { font-size: 0.95rem; margin-bottom: 12px; color: #1a2a3a; }
+        .admin-panel label { display: block; font-size: 0.8rem; font-weight: 600; margin: 12px 0 4px; color: #444; }
+        .admin-panel input[type="file"] { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 12px; font-size: 0.8rem; }
+        .admin-panel .preview-img img { max-width: 100%; max-height: 60px; border-radius: 8px; margin-top: 4px; border: 1px solid #eee; }
+        .admin-stat { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 12px 0; }
+        .stat-item { background: white; padding: 12px 8px; border-radius: 16px; text-align: center; border: 1px solid rgba(0,0,0,0.03); }
+        .stat-item .num { font-size: 1.6rem; font-weight: 700; color: #1a2a3a; }
+        .stat-item .label { font-size: 0.6rem; color: #888; }
+        .admin-shop-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid rgba(0,0,0,0.04); font-size: 0.85rem; }
+        .admin-shop-item input { padding: 4px 8px; border: 1px solid #ddd; border-radius: 8px; width: 50px; font-size: 0.8rem; }
+        .admin-shop-item .btn-danger { background: #c0392b; color: white; border: none; padding: 2px 12px; border-radius: 30px; font-size: 0.65rem; cursor: pointer; }
+    </style>
+</head>
+<body>
+<div id="app">
+
+    <!-- ===== 登录页 ===== -->
+    <div id="loginPage" class="page active">
+        <div class="login-logo">🎫</div>
+        <div class="login-title">旅程通行证</div>
+        <div class="login-slogan">
+            “用一张票，入一座城<br/>
+            寻一个人，<span>离开时是我们</span>”
+        </div>
+        <input type="text" class="login-input" id="ticketInput" placeholder="输入门票编码 (如: M2026-888)" value="M2026-888" />
+        <button class="login-btn" onclick="handleLogin('user')">✧ 开启旅程 ✧</button>
+        
+        <div class="admin-login-link" onclick="toggleAdminLogin()">— 管理入口 —</div>
+        <div class="admin-login-box" id="adminLoginBox">
+            <input type="password" id="adminPassword" placeholder="管理员密码" />
+            <button class="login-btn" style="margin-top:8px; background:rgba(255,255,255,0.08); backdrop-filter:blur(8px); color:#f5c542; box-shadow:none;" onclick="handleLogin('admin')">进入管理</button>
+        </div>
+    </div>
+
+    <!-- ===== 主页 ===== -->
+    <div id="homePage" class="page">
+        <div class="home-header">
+            <h2>📍 旅程</h2>
+            <span class="id-badge" id="userIdDisplay">M2026-888</span>
+        </div>
+        <!-- 进度概览 -->
+        <div class="progress-summary" id="progressSummary">
+            <div class="progress-item"><div class="num" id="progCards">0/10</div><div class="label">集卡进度</div></div>
+            <div class="progress-item"><div class="num" id="progShops">0/4</div><div class="label">打卡店铺</div></div>
+            <div class="progress-item"><div class="num" id="progPrints">2</div><div class="label">打印次数</div></div>
+        </div>
+        <div class="grid-2col">
+            <div class="func-card" onclick="showPage('shopPage')"><i class="fas fa-store"></i><span>周边获取</span></div>
+            <div class="func-card" onclick="showPage('photoPage')"><i class="fas fa-camera"></i><span>定点拍照</span></div>
+            <div class="func-card" onclick="showPage('nfcPage')"><i class="fas fa-credit-card"></i><span>NFC集卡</span></div>
+            <div class="func-card" onclick="showPage('printPage')"><i class="fas fa-print"></i><span>相片打印</span></div>
+            <div class="func-card" onclick="showPage('foodPage')"><i class="fas fa-utensils"></i><span>美食地图</span></div>
+            <div class="func-card" onclick="window.open('https://www.dsat.gov.mo/bus/','_blank')"><i class="fas fa-bus"></i><span>交通线路</span></div>
+        </div>
+        <div id="adminEntry" class="hidden" style="margin-top:16px; text-align:center;">
+            <button class="btn-primary" onclick="showPage('adminPage')" style="background:#c0392b;">🛠️ 管理后台</button>
+        </div>
+    </div>
+
+    <!-- ===== 周边获取 ===== -->
+    <div id="shopPage" class="page">
+        <div class="flex-between"><h3 style="font-weight:600;">🏪 周边获取</h3><span onclick="showPage('homePage')" style="cursor:pointer; opacity:0.6;">← 返回</span></div>
+        <div id="shopList"></div>
+    </div>
+
+    <!-- ===== 定点拍照 ===== -->
+    <div id="photoPage" class="page">
+        <div class="flex-between"><h3 style="font-weight:600;">📸 定点拍照</h3><span onclick="showPage('homePage')" style="cursor:pointer; opacity:0.6;">← 返回</span></div>
+        <div class="map-container" id="mapContainer">
+            <div class="map-pin" style="left:18%; top:25%;" onclick="selectPhotoPoint(0)">A</div>
+            <div class="map-pin" style="left:62%; top:45%;" onclick="selectPhotoPoint(1)">B</div>
+            <div class="map-pin" style="left:32%; top:72%;" onclick="selectPhotoPoint(2)">C</div>
+            <div class="map-pin" style="left:78%; top:22%;" onclick="selectPhotoPoint(3)">D</div>
+        </div>
+        <div id="photoPointInfo" class="card">
+            <div class="flex-between"><span id="photoPointName" style="font-weight:600;">点击地图点位</span><span id="photoPointCount" class="tag-sm">📷 23人</span></div>
+            <div id="photoPreviewArea" class="photo-preview hidden">
+                <canvas id="photoCanvas" width="360" height="240"></canvas>
+                <button class="cam-btn" onclick="openCamera()"><i class="fas fa-camera"></i> 去拍照</button>
+                <p style="font-size:0.6rem; color:#666; margin-top:4px;">拍照后自动合成模板，长按保存</p>
+            </div>
+            <div id="photoSample" style="background:#e8e2da; border-radius:16px; padding:30px; text-align:center; color:#6b5a48; margin-top:8px; min-height:100px; display:flex; align-items:center; justify-content:center; flex-direction:column;">
+                <i class="fas fa-image" style="font-size:2rem; opacity:0.3;"></i>
+                <span style="font-size:0.8rem; margin-top:6px;">点击点位查看示例</span>
+            </div>
+        </div>
+        <video id="video" style="display:none; width:100%; border-radius:16px;" autoplay></video>
+    </div>
+
+    <!-- ===== NFC集卡 ===== -->
+    <div id="nfcPage" class="page">
+        <div class="flex-between"><h3 style="font-weight:600;">💳 NFC集卡</h3><span onclick="showPage('homePage')" style="cursor:pointer; opacity:0.6;">← 返回</span></div>
+        <div class="card">
+            <div class="flex-between"><span>🎴 集卡进度</span><span id="cardCountDisplay">0 / 10</span></div>
+            <div class="card-progress"><div class="card-progress-bar" id="cardProgressBar" style="width:0%;"></div></div>
+            <div class="card-collection" id="cardCollection"></div>
+            <button class="btn-primary" style="width:100%; background:linear-gradient(135deg,#1a2a3a,#2a3a4a);" onclick="simulateNFC()"><i class="fas fa-satellite-dish"></i> 模拟感应 NFC 装置</button>
+            <div id="lotteryArea" class="hidden mt-12">
+                <div class="wheel" onclick="spinWheel()">
+                    <div class="wheel-inner"><span>🎰</span><span style="font-size:0.6rem;">抽奖</span></div>
+                </div>
+                <div id="lotteryResult" class="text-center" style="font-weight:600; margin-top:8px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 相片打印 ===== -->
+    <div id="printPage" class="page">
+        <div class="flex-between"><h3 style="font-weight:600;">🖨️ 相片打印</h3><span onclick="showPage('homePage')" style="cursor:pointer; opacity:0.6;">← 返回</span></div>
+        <div class="card">
+            <div class="flex-between"><span>📇 剩余打印次数</span><span id="printCount" style="font-size:2rem; font-weight:300; color:#f5c542;">2</span></div>
+            <div style="display:flex; gap:8px; margin:12px 0; flex-wrap:wrap;">
+                <button class="btn-outline" onclick="addPrintTask()">📤 分享群聊 (+1)</button>
+                <button class="btn-outline" onclick="buyPrint()">💰 购买 10MOP</button>
+            </div>
+            <div class="qr-box" id="qrcode"></div>
+            <p style="font-size:0.6rem; color:#999; text-align:center;">生成二维码，线下核销打印</p>
+        </div>
+    </div>
+
+    <!-- ===== 美食地图 ===== -->
+    <div id="foodPage" class="page">
+        <div class="flex-between"><h3 style="font-weight:600;">🍜 美食地图</h3><span onclick="showPage('homePage')" style="cursor:pointer; opacity:0.6;">← 返回</span></div>
+        <div id="foodList"></div>
+    </div>
+
+    <!-- ===== 管理后台 ===== -->
+    <div id="adminPage" class="page">
+        <div class="flex-between"><h3 style="font-weight:600;">🛠️ 管理 <span class="admin-badge">管理员</span></h3><span onclick="showPage('homePage')" style="cursor:pointer; opacity:0.6;">← 返回</span></div>
+        <div class="card"><h4>📊 实时数据</h4><div class="admin-stat"><div class="stat-item"><div class="num" id="statUsers">128</div><div class="label">总用户</div></div><div class="stat-item"><div class="num" id="statCheckins">276</div><div class="label">总打卡</div></div><div class="stat-item"><div class="num" id="statCards">45</div><div class="label">集卡总数</div></div></div></div>
+        
+        <div class="admin-panel"><h4>📤 资源管理</h4>
+            <label>🗺️ 地图底图</label><input type="file" accept="image/*" onchange="uploadResource('mapBg', this)" /><div id="mapBgPreview" class="preview-img"></div>
+            <label>📸 模板A (大三巴)</label><input type="file" accept="image/*" onchange="uploadResource('template0', this)" /><div id="template0Preview" class="preview-img"></div>
+            <label>📸 模板B (议事亭)</label><input type="file" accept="image/*" onchange="uploadResource('template1', this)" /><div id="template1Preview" class="preview-img"></div>
+            <label>📸 模板C (澳门塔)</label><input type="file" accept="image/*" onchange="uploadResource('template2', this)" /><div id="template2Preview" class="preview-img"></div>
+            <label>📸 模板D (官也街)</label><input type="file" accept="image/*" onchange="uploadResource('template3', this)" /><div id="template3Preview" class="preview-img"></div>
+            <div id="uploadStatus" style="color:#2a7a4a; margin-top:6px; font-size:0.8rem;"></div>
+            <button class="btn-outline" style="margin-top:10px; width:100%;" onclick="clearResources()">🗑️ 清除所有资源</button>
+        </div>
+        
+        <div class="admin-panel"><h4>🏪 店铺管理</h4><div id="adminShopList"></div>
+            <div style="display:flex; gap:6px; margin-top:10px; flex-wrap:wrap;">
+                <input type="text" id="newShopName" placeholder="新店铺" style="flex:1; padding:8px; border:1px solid #ddd; border-radius:12px; font-size:0.8rem;" />
+                <select id="newShopType" style="padding:8px; border:1px solid #ddd; border-radius:12px; font-size:0.8rem;"><option value="官方">官方</option><option value="消费得">消费得</option></select>
+                <button class="btn-primary" onclick="addShop()" style="padding:8px 16px; font-size:0.8rem;">添加</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 底部导航 ===== -->
+    <div class="bottom-nav" id="bottomNav" style="display:none;">
+        <div class="nav-item active" onclick="showPage('homePage')"><i class="fas fa-home"></i><span>主页</span></div>
+        <div class="nav-item" onclick="showPage('shopPage')"><i class="fas fa-store"></i><span>周边</span></div>
+        <div class="nav-item" onclick="showPage('photoPage')"><i class="fas fa-camera"></i><span>拍照</span></div>
+        <div class="nav-item" onclick="showPage('nfcPage')"><i class="fas fa-credit-card"></i><span>集卡</span></div>
+        <div class="nav-item" onclick="showPage('printPage')"><i class="fas fa-print"></i><span>打印</span></div>
+    </div>
+</div>
+
+<script>
+    // ================================================================
+    //  全局状态
+    // ================================================================
+    const ADMIN_PASSWORD = 'admin123';
+    let currentUser = { id: '', role: 'user' };
+    const state = {
+        shops: [
+            { id: 0, name: '澳门文创馆', type: '官方', got: false, count: 34, threshold: 50 },
+            { id: 1, name: '大三巴礼品店', type: '消费得', got: false, count: 22, threshold: 40 },
+            { id: 2, name: '氹仔手信坊', type: '官方', got: false, count: 47, threshold: 50 },
+            { id: 3, name: '路环咖啡店', type: '消费得', got: false, count: 12, threshold: 30 },
+        ],
+        photoPoints: [
+            { name: '大三巴牌坊', sample: 'https://images.unsplash.com/photo-1585664819886-0a9c7d6b9e8c?w=400&h=300&fit=crop', count: 23 },
+            { name: '议事亭前地', sample: 'https://images.unsplash.com/photo-1599999413215-56e5b9a9d4c8?w=400&h=300&fit=crop', count: 18 },
+            { name: '澳门塔', sample: 'https://images.unsplash.com/photo-1570211776045-3c1c8e8b8f4e?w=400&h=300&fit=crop', count: 31 },
+            { name: '官也街', sample: 'https://images.unsplash.com/photo-1585664819886-0a9c7d6b9e8c?w=400&h=300&fit=crop', count: 9 },
+        ],
+        cards: [],
+        maxCards: 10,
+        hasLottery: false,
+        lotteryPrize: '',
+        printCount: 2,
+        foods: [
+            { name: '安德鲁蛋挞', desc: '路环总店，葡式蛋挞鼻祖', emoji: '🥧', img: 'https://images.unsplash.com/photo-1558618666-fcd25c85f6a2?w=100&h=100&fit=crop' },
+            { name: '诚昌水蟹粥', desc: '氹仔官也街，招牌水蟹粥', emoji: '🦀', img: 'https://images.unsplash.com/photo-1579981695585-4a43b5b4f2d8?w=100&h=100&fit=crop' },
+            { name: '牛记咖喱', desc: '十月初五日街，咖喱牛腩', emoji: '🍛', img: 'https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=100&h=100&fit=crop' },
+            { name: '玛嘉烈蛋挞', desc: '葡京附近，经典蛋挞', emoji: '🥧', img: 'https://images.unsplash.com/photo-1558618666-fcd25c85f6a2?w=100&h=100&fit=crop' },
+        ]
+    };
+
+    // ================================================================
+    //  资源管理 (localStorage)
+    // ================================================================
+    const RESOURCE_KEYS = ['mapBg', 'template0', 'template1', 'template2', 'template3'];
+    function getResource(key) { try { return localStorage.getItem('res_' + key); } catch(e) { return null; } }
+    function setResource(key, data) { try { localStorage.setItem('res_' + key, data); } catch(e) { alert('存储失败'); } }
+    function uploadResource(key, input) {
+        const file = input.files[0]; if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const dataUrl = e.target.result; setResource(key, dataUrl);
+            document.getElementById('uploadStatus').innerText = `✅ ${key} 上传成功！`;
+            applyResource(key, dataUrl);
+            const previewId = key + 'Preview';
+            const previewEl = document.getElementById(previewId);
+            if (previewEl) previewEl.innerHTML = `<img src="${dataUrl}" />`;
+            if (key === 'mapBg') document.getElementById('mapContainer').style.backgroundImage = `url(${dataUrl})`;
+        };
+        reader.readAsDataURL(file);
+    }
+    function applyResource(key, dataUrl) {
+        if (key === 'mapBg') document.getElementById('mapContainer').style.backgroundImage = `url(${dataUrl})`;
+        if (key.startsWith('template')) {
+            const idx = parseInt(key.replace('template', ''));
+            if (!isNaN(idx)) { window._templateImages = window._templateImages || {}; window._templateImages[idx] = dataUrl; }
+        }
+    }
+    function loadAllResources() {
+        RESOURCE_KEYS.forEach(key => {
+            const data = getResource(key);
+            if (data) {
+                applyResource(key, data);
+                const previewId = key + 'Preview';
+                const previewEl = document.getElementById(previewId);
+                if (previewEl) previewEl.innerHTML = `<img src="${data}" />`;
+            }
+        });
+        for (let i=0; i<4; i++) {
+            const data = getResource('template' + i);
+            if (data) { window._templateImages = window._templateImages || {}; window._templateImages[i] = data; }
+        }
+    }
+    function clearResources() { if (!confirm('确定清除所有上传资源？')) return; RESOURCE_KEYS.forEach(key => localStorage.removeItem('res_' + key)); location.reload(); }
+
+    // ================================================================
+    //  登录逻辑
+    // ================================================================
+    function toggleAdminLogin() { document.getElementById('adminLoginBox').classList.toggle('show'); }
+    function handleLogin(role) {
+        if (role === 'admin') {
+            const pwd = document.getElementById('adminPassword').value;
+            if (pwd !== ADMIN_PASSWORD) { alert('❌ 密码错误'); return; }
+            currentUser = { id: 'ADMIN', role: 'admin' };
+            enterApp('admin');
+            return;
+        }
+        const val = document.getElementById('ticketInput').value.trim();
+        if (val.length < 3) { alert('请输入有效门票编码'); return; }
+        currentUser = { id: val, role: 'user' };
+        enterApp('user');
+    }
+    function enterApp(role) {
+        document.getElementById('userIdDisplay').innerText = currentUser.id;
+        document.getElementById('loginPage').classList.remove('active');
+        document.getElementById('homePage').classList.add('active');
+        document.getElementById('bottomNav').style.display = 'flex';
+        if (role === 'admin') {
+            document.getElementById('adminEntry').classList.remove('hidden');
+            document.getElementById('userIdDisplay').innerHTML = currentUser.id + ' <span style="background:#c0392b; padding:0 10px; border-radius:30px; font-size:0.6rem; color:#fff;">管理</span>';
+            renderAdminShopList(); updateStats();
+        } else {
+            document.getElementById('adminEntry').classList.add('hidden');
+        }
+        renderAll(); loadAllResources();
+    }
+    function renderAll() { renderShops(); renderCards(); renderFoods(); updatePrintQr(); updateProgress(); }
+
+    // ================================================================
+    //  页面切换
+    // ================================================================
+    function showPage(pageId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        const map = { homePage:0, shopPage:1, photoPage:2, nfcPage:3, printPage:4 };
+        const idx = map[pageId];
+        if (idx !== undefined) document.querySelectorAll('.nav-item')[idx]?.classList.add('active');
+        if (pageId === 'shopPage') renderShops();
+        if (pageId === 'nfcPage') renderCards();
+        if (pageId === 'foodPage') renderFoods();
+        if (pageId === 'printPage') updatePrintQr();
+        if (pageId === 'adminPage') { renderAdminShopList(); updateStats(); }
+        if (pageId === 'homePage') updateProgress();
+        window.scrollTo(0,0);
+    }
+
+    // ================================================================
+    //  主页进度更新
+    // ================================================================
+    function updateProgress() {
+        document.getElementById('progCards').innerText = state.cards.length + '/10';
+        const got = state.shops.filter(s => s.got).length;
+        document.getElementById('progShops').innerText = got + '/' + state.shops.length;
+        document.getElementById('progPrints').innerText = state.printCount;
+    }
+
+    // ================================================================
+    //  周边
+    // ================================================================
+    function renderShops() {
+        const container = document.getElementById('shopList');
+        container.innerHTML = state.shops.map((shop, idx) => {
+            const flag = shop.got ? '🚩' : '🏳️';
+            const flagColor = shop.got ? 'style="color:#2a7a4a;"' : 'style="color:#ccc;"';
+            const restock = shop.count >= shop.threshold ? '<span class="shop-tag restock">🔥 待补货</span>' : '';
+            return `<div class="shop-item"><div class="shop-info"><div class="shop-name"><span class="flag" ${flagColor}>${flag}</span>${shop.name}<span class="shop-tag">${shop.type}</span>${restock}</div><div class="shop-desc">👥 ${shop.count}人已打卡</div></div><div><button class="btn-outline" onclick="toggleShopGot(${idx})">${shop.got ? '✅ 已获取' : '⬜ 未获取'}</button></div></div>`;
+        }).join('');
+    }
+    function toggleShopGot(idx) {
+        state.shops[idx].got = !state.shops[idx].got;
+        if (state.shops[idx].got) state.shops[idx].count = Math.min(state.shops[idx].count + 1, state.shops[idx].threshold + 5);
+        renderShops(); updateProgress();
+        if (currentUser.role === 'admin') updateStats();
+    }
+
+    // ================================================================
+    //  拍照
+    // ================================================================
+    let selectedPhotoIdx = 0;
+    function selectPhotoPoint(idx) {
+        selectedPhotoIdx = idx;
+        const pt = state.photoPoints[idx];
+        document.getElementById('photoPointName').innerText = pt.name;
+        document.getElementById('photoPointCount').innerText = `📷 ${pt.count}人拍摄`;
+        document.getElementById('photoSample').innerHTML = `<img src="${pt.sample}" style="width:100%; max-height:140px; object-fit:cover; border-radius:12px;" /><div style="font-size:0.7rem; color:#888; margin-top:4px;">点击「去拍照」合成模板</div>`;
+        document.getElementById('photoPreviewArea').classList.remove('hidden');
+        applyTemplateToCanvas(idx);
+    }
+    function applyTemplateToCanvas(idx) {
+        const canvas = document.getElementById('photoCanvas');
+        const ctx = canvas.getContext('2d');
+        const templateData = window._templateImages ? window._templateImages[idx] : null;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (templateData) {
+            const img = new Image();
+            img.onload = function() { ctx.drawImage(img, 0, 0, canvas.width, canvas.height); ctx.fillStyle = 'rgba(255,255,255,0.6)'; ctx.font = '14px sans-serif'; ctx.fillText('📸 拍照合成', 16, 28); };
+            img.src = templateData;
+        } else {
+            ctx.fillStyle = '#2a2a3a'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#f5c542'; ctx.font = '16px sans-serif'; ctx.fillText('📸 上传模板更精彩', 90, 120);
+        }
+    }
+    function openCamera() {
+        const video = document.getElementById('video'), canvas = document.getElementById('photoCanvas'), ctx = canvas.getContext('2d');
+        if (!navigator.mediaDevices?.getUserMedia) { alert('浏览器不支持摄像头'); return; }
+        if (video.style.display === 'none') {
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+                .then(stream => { video.srcObject = stream; video.style.display = 'block'; video.play(); document.querySelector('.cam-btn').innerHTML = '<i class="fas fa-check"></i> 按下拍照'; document.querySelector('.cam-btn').onclick = capturePhoto; })
+                .catch(err => alert('无法访问摄像头: ' + err.message));
+        } else { capturePhoto(); }
+    }
+    function capturePhoto() {
+        const video = document.getElementById('video'), canvas = document.getElementById('photoCanvas'), ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const idx = selectedPhotoIdx, templateData = window._templateImages ? window._templateImages[idx] : null;
+        if (templateData) {
+            const img = new Image();
+            img.onload = function() {
+                ctx.globalAlpha = 0.35; ctx.drawImage(img, 0, 0, canvas.width, canvas.height); ctx.globalAlpha = 1;
+                ctx.strokeStyle = '#f5c542'; ctx.lineWidth = 6; ctx.strokeRect(4, 4, canvas.width-8, canvas.height-8);
+                ctx.fillStyle = 'rgba(26,42,58,0.7)'; ctx.fillRect(0, canvas.height-40, canvas.width, 40);
+                ctx.fillStyle = 'white'; ctx.font = 'bold 15px sans-serif'; ctx.fillText(`📍 ${state.photoPoints[idx].name} · 旅程通行证`, 16, canvas.height-12);
+            };
+            img.src = templateData;
+        } else {
+            ctx.strokeStyle = '#f5c542'; ctx.lineWidth = 6; ctx.strokeRect(4, 4, canvas.width-8, canvas.height-8);
+            ctx.fillStyle = 'rgba(26,42,58,0.7)'; ctx.fillRect(0, canvas.height-40, canvas.width, 40);
+            ctx.fillStyle = 'white'; ctx.font = 'bold 15px sans-serif'; ctx.fillText(`📍 ${state.photoPoints[idx].name} · 旅程通行证`, 16, canvas.height-12);
+        }
+        if (video.srcObject) { video.srcObject.getTracks().forEach(t => t.stop()); video.style.display = 'none'; }
+        document.querySelector('.cam-btn').innerHTML = '<i class="fas fa-camera"></i> 重新拍照';
+        document.querySelector('.cam-btn').onclick = openCamera;
+        alert('✅ 照片已合成！长按保存');
+    }
+
+    // ================================================================
+    //  NFC集卡
+    // ================================================================
+    function renderCards() {
+        const container = document.getElementById('cardCollection');
+        const count = state.cards.length;
+        document.getElementById('cardCountDisplay').innerText = `${count} / ${state.maxCards}`;
+        document.getElementById('cardProgressBar').style.width = `${(count/state.maxCards)*100}%`;
+        let html = '';
+        for (let i=0; i<state.maxCards; i++) {
+            const filled = i < count;
+            html += `<div class="card-slot ${filled?'filled':''}">${filled ? '🃏' : (i+1)}</div>`;
+        }
+        container.innerHTML = html;
+        const lotteryArea = document.getElementById('lotteryArea');
+        if (count >= state.maxCards && !state.hasLottery) lotteryArea.classList.remove('hidden');
+        else lotteryArea.classList.add('hidden');
+        updateProgress();
+    }
+    function simulateNFC() {
+        if (state.cards.length >= state.maxCards) { alert('🎉 已集满！抽奖吧'); return; }
+        const newCard = `卡${state.cards.length+1}`;
+        state.cards.push(newCard);
+        renderCards();
+        if (navigator.vibrate) navigator.vibrate(30);
+        alert(`✅ 感应成功！获得 ${newCard}`);
+        if (state.cards.length === state.maxCards) { alert('🎊 集满10张！获得抽奖机会！'); renderCards(); }
+        if (currentUser.role === 'admin') updateStats();
+    }
+    function spinWheel() {
+        if (state.cards.length < state.maxCards) { alert(`还需 ${state.maxCards - state.cards.length} 张`); return; }
+        if (state.hasLottery) { alert('已抽过奖，请到会场核销'); return; }
+        const prizes = ['🎁 澳门旅游塔门票', '🎁 葡式晚餐券', '🎁 文创礼盒', '🎁 水舞间表演票', '🎁 免费打印券'];
+        const prize = prizes[Math.floor(Math.random() * prizes.length)];
+        state.lotteryPrize = prize; state.hasLottery = true;
+        document.getElementById('lotteryResult').innerHTML = `🎉 恭喜：<strong>${prize}</strong><br/><span style="font-size:0.7rem;">核销码: ${currentUser.id}-${Date.now().toString().slice(-6)}</span>`;
+        const qrDiv = document.createElement('div'); qrDiv.id = 'lotteryQr';
+        document.getElementById('lotteryResult').appendChild(qrDiv);
+        new QRCode(qrDiv, { text: `核销:${currentUser.id}-${prize}`, width: 80, height: 80 });
+        alert(`🎊 抽中：${prize}，到会场核销！`);
+    }
+
+    // ================================================================
+    //  打印
+    // ================================================================
+    function updatePrintQr() {
+        document.getElementById('printCount').innerText = state.printCount;
+        const qr = document.getElementById('qrcode'); qr.innerHTML = '';
+        if (state.printCount > 0) {
+            new QRCode(qr, { text: `${currentUser.id}-PRINT-${Date.now().toString().slice(-4)}`, width: 120, height: 120 });
+        } else {
+            qr.innerHTML = '<div style="padding:20px; color:#999;">暂无次数</div>';
+        }
+        updateProgress();
+    }
+    function addPrintTask() { if (confirm('分享群聊，获得+1次？')) { state.printCount += 1; updatePrintQr(); } }
+    function buyPrint() { if (confirm('10MOP购买1次？')) { state.printCount += 1; updatePrintQr(); } }
+
+    // ================================================================
+    //  美食
+    // ================================================================
+    function renderFoods() {
+        const container = document.getElementById('foodList');
+        container.innerHTML = state.foods.map(f => `
+            <div class="food-item" onclick="alert('${f.desc}')">
+                <img class="food-img" src="${f.img}" onerror="this.style.display='none'" />
+                <div><strong>${f.name}</strong><div style="font-size:0.7rem; color:#888;">${f.desc}</div></div>
+                <span style="margin-left:auto; font-size:0.65rem; background:rgba(0,0,0,0.04); padding:2px 12px; border-radius:30px;">📍</span>
+            </div>
+        `).join('');
+    }
+
+    // ================================================================
+    //  管理后台
+    // ================================================================
+    function updateStats() {
+        document.getElementById('statUsers').innerText = Math.floor(100 + Math.random() * 80);
+        document.getElementById('statCheckins').innerText = state.shops.reduce((s, i) => s + i.count, 0);
+        document.getElementById('statCards').innerText = state.cards.length + Math.floor(Math.random() * 30);
+    }
+    function renderAdminShopList() {
+        const container = document.getElementById('adminShopList');
+        container.innerHTML = state.shops.map((shop, idx) => `
+            <div class="admin-shop-item">
+                <span>${shop.name} <span class="tag-sm">${shop.type}</span></span>
+                <span>打卡 ${shop.count}/${shop.threshold}</span>
+                <div><input type="number" id="threshold_${idx}" value="${shop.threshold}" /><button class="btn-outline" onclick="updateThreshold(${idx})" style="margin-left:4px;">更新</button><button class="btn-danger" onclick="removeShop(${idx})">删</button></div>
+            </div>
+        `).join('');
+    }
+    function updateThreshold(idx) {
+        const val = parseInt(document.getElementById(`threshold_${idx}`).value);
+        if (val > 0) { state.shops[idx].threshold = val; renderShops(); renderAdminShopList(); alert('✅ 已更新'); }
+    }
+    function addShop() {
+        const name = document.getElementById('newShopName').value.trim();
+        if (!name) { alert('请输入名称'); return; }
+        state.shops.push({ id: Date.now(), name, type: document.getElementById('newShopType').value, got: false, count: 0, threshold: 30 });
+        document.getElementById('newShopName').value = '';
+        renderShops(); renderAdminShopList(); alert('✅ 已添加');
+    }
+    function removeShop(idx) { if (!confirm(`删除 "${state.shops[idx].name}"？`)) return; state.shops.splice(idx, 1); renderShops(); renderAdminShopList(); }
+
+    // ================================================================
+    //  初始化
+    // ================================================================
+    renderAll();
+    loadAllResources();
+    document.getElementById('userIdDisplay').innerText = '未登录';
+</script>
+</body>
+</html>        .nav-item { display: flex; flex-direction: column; align-items: center; color: #999; font-size: 0.65rem; transition: 0.2s; cursor: pointer; padding: 4px 8px; border-radius: 30px; min-width: 52px; }
         .nav-item i { font-size: 1.5rem; margin-bottom: 2px; }
         .nav-item.active { color: #1a2a3a; font-weight: 600; }
         .nav-item.active i { color: #f5c542; }
